@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "create-clips": {
+      "source": "/Users/kasperjunge/Agent/Code/computerlovetech/private/video-edit-cli/skills",
+      "sourceType": "local",
+      "computedHash": "0e33d4b51010aa6459f5adb315bf5c85fc38c757d298034cfc3a0c097fac1df4"
+    },
+    "video-editor": {
+      "source": "/Users/kasperjunge/Agent/Code/computerlovetech/private/video-edit-cli/skills",
+      "sourceType": "local",
+      "computedHash": "4f9f08249f8222bdd6403aded67a44b0e247022ea212d3fdfe14dc2eb1e21095"
+    }
+  }
+}
