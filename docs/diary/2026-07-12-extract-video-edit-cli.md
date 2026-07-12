@@ -1,0 +1,121 @@
+# Diary: Extract and publish video-edit-cli
+
+Extract the project-agnostic video editing package and companion skill from Ship the
+Diff into a dedicated private repository, rename its distribution and executable, and
+prepare a standalone PyPI release.
+
+## Step 1: Establish the standalone repository
+
+**Author:** main
+
+### Prompt Context
+
+**Verbatim prompt:** `actually, let's call it "video-edit-cli" instead.\n\ngreat. otherwise go.`
+**Interpretation:** Create the private `computerlovetech/video-edit-cli` repository,
+extract and rename the existing CLI, validate it independently, publish it to PyPI, and
+make the companion editing skill distributable.
+**Inferred intent:** Establish a stable reusable foundation before building higher-level
+skills such as `create-clips`.
+
+### What I did
+
+I verified GitHub, agr, FFmpeg, uv, and PyPI publishing prerequisites; confirmed the
+canonical PyPI JSON endpoint for `video-edit-cli` returned 404; created the private
+GitHub repository; copied the tracked package, tests, schemas, research, roadmap, and
+companion skill; and renamed the distribution and executable while retaining the
+`video_editor` Python import namespace for compatibility.
+
+### Why
+
+The media mechanics and workspace data contract need an independent lifecycle and must
+not inherit Ship the Diff-specific packaging or identity.
+
+### What worked
+
+GitHub authentication includes repository and workflow scopes, `UV_PUBLISH_TOKEN` is
+configured, and the new private repository was created successfully.
+
+### What didn't work
+
+The first `uv run video-edit-cli --version` failed while building the renamed package:
+`Error: Expected a Python module at: src/video_edit_cli/__init__.py`. The `uv_build`
+backend inferred a module name from the new distribution name. I retained the compatible
+`video_editor` namespace and configured `[tool.uv.build-backend] module-name =
+"video_editor"` explicitly.
+
+### What I learned
+
+The source package already has a clean `src/` layout, comprehensive deterministic tests,
+optional MLX and DeepFilterNet extras, and a companion skill registered through agr.
+
+### What was tricky
+
+The distribution and executable need the new `video-edit-cli` name, while the established
+skill name and Python import namespace should remain `video-editor` and `video_editor`.
+Keeping those layers distinct avoids needless workspace and user-prompt churn.
+
+### What warrants review
+
+Review `/pyproject.toml`, `/README.md`, `/AGENTS.md`, `/skills/video-editor/`, and the
+schema identifiers before the first release.
+
+### Future work
+
+Run all quality gates, build and inspect distributions, test a clean installation,
+publish version 0.1.0, and verify installation from PyPI.
+
+## Step 2: Validate the package and skill independently
+
+**Author:** main
+
+### Prompt Context
+
+**Verbatim prompt:** `actually, let's call it "video-edit-cli" instead.\n\ngreat. otherwise go.`
+**Interpretation:** Prove that the extracted repository works as an independent Python
+distribution and skill before publishing it.
+**Inferred intent:** Avoid releasing a source-tree-only package whose command, schemas,
+or skill fail when installed elsewhere.
+
+### What I did
+
+I added standalone package metadata, GitHub Actions, repository instructions, agr
+configuration, and skill UI metadata. I regenerated `/uv.lock` and `/agr.lock`, ran all
+four repository quality gates, built the sdist and wheel, inspected their contents,
+installed the wheel into a clean CPython 3.11 environment, invoked the installed command,
+and verified all five JSON schemas were accessible through `importlib.resources`. I also
+validated `/skills/video-editor/` with the skill validator and checked agr in locked mode.
+
+### Why
+
+The published wheel, not the editable source checkout, is the actual user-facing
+artifact. The companion skill also needs to be independently installable and valid.
+
+### What worked
+
+Ruff lint and formatting, ty, and 58 non-integration tests passed. The clean wheel
+reported version 0.1.0, exposed `video-edit-cli --help`, and included every schema. The
+skill validator passed and agr reported the local skill installed and lock-consistent.
+
+### What didn't work
+
+No additional failures occurred after configuring the explicit module name.
+
+### What I learned
+
+The wheel is pure Python and small, while FFmpeg remains an intentional external runtime
+dependency. Optional model backends remain isolated behind extras.
+
+### What was tricky
+
+The sdist must rebuild the same wheel as the source checkout. Running `uv build` exercised
+that path and confirmed the schemas survive both build stages.
+
+### What warrants review
+
+Review the wheel listing, `/pyproject.toml` metadata, `/agr.toml`, and
+`/.github/workflows/test.yml`. CI should reproduce the local gates on Ubuntu with FFmpeg.
+
+### Future work
+
+Commit and push the standalone repository, publish 0.1.0 to PyPI, then install it from
+the public index in a second clean environment.

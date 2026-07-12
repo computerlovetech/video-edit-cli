@@ -1,0 +1,13 @@
+default_source = "github"
+tools = ["claude", "codex"]
+default_owner = "computerlovetech"
+default_repo = "skills"
+
+dependencies = [
+    {path = "skills/video-editor", type = "skill"},
+]
+
+[[source]]
+name = "github"
+type = "git"
+url = "https://github.com/{owner}/{repo}.git"

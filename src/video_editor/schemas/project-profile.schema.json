@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "video-edit-cli/project-profile.schema.json",
+  "title": "External project profile (YAML, validated as JSON)",
+  "type": "object",
+  "required": ["schema_version", "profiles"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["canvas"],
+        "properties": {
+          "canvas": {
+            "type": "object",
+            "required": ["width", "height"],
+            "properties": {
+              "width": {"type": "integer", "minimum": 16},
+              "height": {"type": "integer", "minimum": 16},
+              "frame_rate": {"type": ["number", "null"]}
+            }
+          },
+          "video_codec": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "crf": {"type": ["integer", "null"]},
+              "preset": {"type": ["string", "null"]}
+            }
+          },
+          "audio_codec": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "bitrate": {"type": ["string", "null"]}
+            }
+          },
+          "loudness": {
+            "type": "object",
+            "properties": {
+              "integrated_lufs": {"type": "number"},
+              "true_peak_dbtp": {"type": "number"},
+              "lra": {"type": "number"}
+            }
+          },
+          "subtitles": {
+            "type": "object",
+            "properties": {
+              "mode": {"enum": ["mux", "burn", "none"]}
+            }
+          }
+        }
+      }
+    },
+    "music": {
+      "type": ["object", "null"],
+      "required": ["path"],
+      "properties": {
+        "path": {"type": "string"},
+        "gain_db": {"type": "number"},
+        "ducking": {
+          "type": "object",
+          "properties": {
+            "threshold": {"type": "number"},
+            "ratio": {"type": "number"}
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": ["object", "null"],
+      "additionalProperties": {"type": "string"}
+    },
+    "fonts": {
+      "type": ["object", "null"],
+      "additionalProperties": {"type": "string"}
+    },
+    "camera_aliases": {
+      "type": ["object", "null"],
+      "additionalProperties": {"type": "string"}
+    },
+    "subtitle_style": {"type": ["object", "null"]}
+  }
+}

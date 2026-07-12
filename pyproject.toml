@@ -1,0 +1,52 @@
+[project]
+name = "video-edit-cli"
+version = "0.1.0"
+description = "Headless, project-agnostic video-editing CLI with atomic subcommands for AI agents."
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["video", "editing", "ffmpeg", "agents", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Video :: Conversion",
+]
+dependencies = [
+    "jsonschema>=4.21",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+mlx = ["mlx-whisper>=0.4"]
+df = ["deepfilternet>=0.5"]
+
+[project.scripts]
+video-edit-cli = "video_editor.cli:main"
+
+[project.urls]
+Repository = "https://github.com/computerlovetech/video-edit-cli"
+Issues = "https://github.com/computerlovetech/video-edit-cli/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.15.20",
+    "ty>=0.0.57",
+]
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "video_editor"
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: requires real local model backends (deselected by default)",
+]
+addopts = "-m 'not integration'"

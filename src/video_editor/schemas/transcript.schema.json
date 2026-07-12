@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "video-edit-cli/transcript.schema.json",
+  "title": "Authoritative word-level transcript",
+  "type": "object",
+  "required": ["schema_version", "source", "language", "backend", "model", "segments"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "source": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"type": "string"},
+        "source_id": {"type": ["string", "null"]}
+      }
+    },
+    "language": {"type": ["string", "null"]},
+    "backend": {"type": "string"},
+    "model": {"type": ["string", "null"]},
+    "created_at": {"type": "string"},
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["start", "end", "text", "words"],
+        "properties": {
+          "start": {"type": "number", "minimum": 0},
+          "end": {"type": "number", "minimum": 0},
+          "text": {"type": "string"},
+          "speaker": {"type": ["string", "null"]},
+          "words": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["text", "start", "end"],
+              "properties": {
+                "text": {"type": "string"},
+                "start": {"type": "number", "minimum": 0},
+                "end": {"type": "number", "minimum": 0},
+                "confidence": {"type": ["number", "null"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Editor"
+  short_description: "Inspect, edit, master, and package video"
+  default_prompt: "Use $video-editor to inspect and edit this media into a validated deliverable."

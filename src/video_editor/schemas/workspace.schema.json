@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "video-edit-cli/workspace.schema.json",
+  "title": "Editing workspace manifest",
+  "type": "object",
+  "required": ["schema_version", "workspace_id", "created_at", "sources", "artifacts"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "workspace_id": {"type": "string"},
+    "created_at": {"type": "string"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "sha256", "registered_at"],
+        "properties": {
+          "id": {"type": "string"},
+          "path": {"type": "string"},
+          "sha256": {"type": "string"},
+          "role": {"type": ["string", "null"]},
+          "registered_at": {"type": "string"}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "command", "created_at"],
+        "properties": {
+          "path": {"type": "string"},
+          "kind": {"type": "string"},
+          "command": {"type": "string"},
+          "created_at": {"type": "string"}
+        }
+      }
+    }
+  }
+}
