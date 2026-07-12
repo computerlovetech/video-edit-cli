@@ -123,3 +123,77 @@ Review the wheel listing, `/pyproject.toml` metadata, `/agr.toml`, and
 
 Commit and push the standalone repository, publish 0.1.0 to PyPI, then install it from
 the public index in a second clean environment.
+
+## Step 3: Publish and migrate consumers
+
+**Author:** main
+
+### Prompt Context
+
+**Verbatim prompt:** `actually, let's call it "video-edit-cli" instead.\n\ngreat. otherwise go.`
+**Interpretation:** Complete the standalone release and make the original repository use
+it as the source of truth.
+**Inferred intent:** Leave one maintained CLI implementation and a reproducible path for
+projects to install both its command and editing skill.
+
+### What I did
+
+I committed and pushed the private `computerlovetech/video-edit-cli` repository, ran a
+dry-run publish, uploaded the 0.1.0 wheel and sdist to PyPI, and verified the public
+project page and simple index. I installed 0.1.0 from the explicit public index into a
+fresh CPython 3.11 environment and checked the command, distribution metadata, import
+namespace, and workspace schema. In Ship the Diff I replaced the local agr dependency
+with `computerlovetech/video-edit-cli/video-editor`, removed the embedded package,
+skill, and transferred design documents, updated its repository guidance and CI matrix,
+ran its remaining package checks, committed the migration, and pushed main.
+
+### Why
+
+Publishing before removing the embedded copy ensured Ship the Diff always had a working
+replacement. Pinning the remote skill commit through agr prevents silent drift.
+
+### What worked
+
+PyPI serves `video-edit-cli` 0.1.0 as both a universal wheel and source distribution.
+The cache-free public install reported version 0.1.0 and found the packaged schema. agr
+installed the private remote `video-editor` skill into both Claude and Codex and pinned
+commit `833850722e447a06ca697027ededf51ed75ec749`. Ship the Diff's mailbag tests (8),
+newsletter tests (12), and CLI tests (10) passed; all related lint, formatting, and type
+checks passed.
+
+### What didn't work
+
+The first generated-bytecode cleanup command, `git ls-files -z | rg -z
+'__pycache__|\\.py[co]$' | xargs -0 git rm`, failed verbatim with `fatal: pathspec
+'binary file matches (found "\\0" byte around offset 26)' did not match any files` because
+`rg` treated the NUL-delimited stream as binary. I reran it with line-delimited
+`git ls-files` safely. Immediately after upload, the first cache-free default-index
+install reported `Because video-edit-cli was not found in the package registry`; the
+PyPI page was already live but simple-index propagation had not completed. The explicit
+PyPI simple index succeeded on retry. Ship the Diff's documented `uv run pytest` failed
+with `Failed to spawn: pytest` because that package does not declare pytest; running
+`uv run --isolated --with pytest -- python -m pytest` passed all 10 tests without changing
+its unrelated dependencies.
+
+### What I learned
+
+Distribution-name availability, project-page availability, and simple-index resolution
+can briefly disagree after a first PyPI upload. Release verification should query and
+install from the canonical simple index rather than relying only on the project page.
+
+### What was tricky
+
+The migration crossed three independent state systems: immutable PyPI artifacts, a
+private Git repository, and agr's commit/content-hash lock. The safe order was validate,
+push, publish, independently install, repoint agr, and only then remove the embedded copy.
+
+### What warrants review
+
+Review PyPI 0.1.0, the private repository's main branch and CI run, Ship the Diff commit
+`1b87b08`, and the remote agr lock. The only remaining Ship the Diff working-tree files
+are pre-existing generated skill directories and the separate episode-115 editing diary.
+
+### Future work
+
+Add trusted PyPI publishing for future releases, then implement the generic
+`create-clips` skill against the stable workspace contract.
