@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `skills list` and `skills install` subcommands: the `video-editor` agent skill now
   ships inside the package and can be installed into a project with
   `video-edit-cli skills install` (defaults to `.claude/skills`).
+- `create-clips` skill: derives publishable social clips (Shorts, YouTube,
+  LinkedIn) from a long-form recording. Distributed via agr only; intentionally
+  not bundled in the wheel.
 
 ### Changed
 

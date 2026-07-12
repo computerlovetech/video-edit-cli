@@ -6,4 +6,6 @@ __pycache__/
 .agents/
 .claude/*
 !.claude/skills/
+.claude/skills/*
+!.claude/skills/release/
 .worktrees/

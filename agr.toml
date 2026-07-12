@@ -5,6 +5,7 @@ default_repo = "skills"
 
 dependencies = [
     {path = "skills/video-editor", type = "skill"},
+    {path = "skills/create-clips", type = "skill"},
 ]
 
 [[source]]
