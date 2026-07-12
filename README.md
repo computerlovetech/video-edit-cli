@@ -31,7 +31,18 @@ uv run video-edit-cli filmstrip create --input recording.mp4 \
 ```
 
 The companion skill in `skills/video-editor/` teaches agents the editing method;
-this package owns the mechanics. Tests generate small deterministic fixtures at
+this package owns the mechanics. The skill ships inside the package — install it
+into a project with:
+
+```sh
+video-edit-cli skills install            # copies into .claude/skills/
+video-edit-cli skills install --target <dir>
+```
+
+Alternatively, manage it with agr: `agr add computerlovetech/video-edit-cli/video-editor`.
+Skills in `skills/` that are not listed in `video_editor.skills.SHIPPED_SKILLS`
+(and the matching force-include entries in `pyproject.toml`) are agr-only and do
+not ship in the wheel. Tests generate small deterministic fixtures at
 runtime (`tests/generate_fixtures.py`); no media is committed.
 
 Quality gates (run from this directory):

@@ -39,11 +39,20 @@ dev = [
 ]
 
 [build-system]
-requires = ["uv_build>=0.7.19,<0.9.0"]
-build-backend = "uv_build"
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
 
-[tool.uv.build-backend]
-module-name = "video_editor"
+[tool.hatch.build.targets.wheel]
+packages = ["src/video_editor"]
+
+# Ship the user-facing agent skills inside the package (playwright-cli pattern):
+# the canonical copies stay in the repository-root skills/ directory, and only
+# the listed skills are bundled. Development-only skills must not be added here.
+[tool.hatch.build.targets.wheel.force-include]
+"skills/video-editor" = "video_editor/skills/video-editor"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "skills", "tests", "README.md", "pyproject.toml"]
 
 [tool.pytest.ini_options]
 markers = [

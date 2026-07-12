@@ -21,6 +21,7 @@ from video_editor import (
     rendering,
     result,
     review,
+    skills,
     subtitles,
     sync,
     workspace,
@@ -1000,7 +1001,38 @@ def build_parser() -> argparse.ArgumentParser:
         handler=cmd_short_create_plan, command_name="short create-plan"
     )
 
+    skills_group = top.add_parser(
+        "skills", help="agent skills bundled with the CLI"
+    ).add_subparsers(dest="action", required=True)
+    sk_list = skills_group.add_parser("list", help="list the bundled skills")
+    sk_list.set_defaults(handler=cmd_skills_list, command_name="skills list")
+    sk_install = skills_group.add_parser(
+        "install", help="copy the bundled skills into an agent skills directory"
+    )
+    sk_install.add_argument(
+        "--target",
+        default=".claude/skills",
+        help="skills directory to install into (default: .claude/skills)",
+    )
+    sk_install.set_defaults(handler=cmd_skills_install, command_name="skills install")
+
     return parser
+
+
+def cmd_skills_list(
+    args: argparse.Namespace,
+) -> tuple[dict[str, Any], list[dict[str, str]]]:
+    return {"skills": skills.list_skills()}, []
+
+
+def cmd_skills_install(
+    args: argparse.Namespace,
+) -> tuple[dict[str, Any], list[dict[str, str]]]:
+    target = Path(args.target)
+    target.mkdir(parents=True, exist_ok=True)
+    installed = skills.install_skills(target)
+    artifacts = [result.artifact(entry["path"], "skill") for entry in installed]
+    return {"installed": installed, "target": str(target.resolve())}, artifacts
 
 
 def run(argv: list[str] | None = None) -> int:

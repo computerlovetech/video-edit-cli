@@ -4,4 +4,8 @@ dist/
 __pycache__/
 *.py[cod]
 .agents/
-.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/release/
+.worktrees/
