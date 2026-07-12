@@ -1,5 +1,7 @@
 tests/fixtures/
 .venv/
 dist/
+__pycache__/
+*.py[cod]
 .agents/
 .claude/
