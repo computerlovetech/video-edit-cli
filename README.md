@@ -2,12 +2,14 @@
 
 A video-editing tool for AI agents. Your agent gets a headless editing
 workbench — inspect, transcribe, cut, master, and package video — plus a
-bundled skill that teaches it how to edit well.
+bundled skill that teaches it how to edit well. It works with any coding
+agent that supports skills: Claude Code, Codex, Pi, Cursor, Copilot, Amp,
+and others.
 
 ## Get started
 
 Install the `video-edit-cli` skill into your project with
-[skills.sh](https://skills.sh):
+[skills.sh](https://skills.sh) (it installs into every agent you use):
 
 ```sh
 npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
@@ -17,6 +19,25 @@ Then ask your agent to edit a recording. The skill guides the agent through the
 whole workflow — including installing the `video-edit-cli` CLI itself
 (`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg`/`ffprobe`
 must be present separately.
+
+## Examples
+
+Things you can ask your agent once the skill is installed:
+
+> Make highlight clips from this recording in vertical shorts format, with
+> matching post captions I can use on LinkedIn and YouTube Shorts. Burn the
+> subtitles into the video so it's clearly watchable without sound:
+> ./recordings/talk.mp4
+
+> Edit this podcast recording into a publishable episode: cut the false starts
+> and long pauses, clean up and master the audio, and give me an MP4 with
+> muxed subtitles.
+
+> Here are two camera angles and a separate mic track from the same session —
+> sync them and build a rough cut that follows whoever is speaking.
+
+> Inspect this file and tell me what's in it: duration, streams, loudness,
+> and whether the audio needs restoration before I publish it.
 
 ## How it works
 
