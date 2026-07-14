@@ -6,3 +6,4 @@ __pycache__/
 .agents/
 .claude/
 .worktrees/
+site/

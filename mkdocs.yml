@@ -1,0 +1,81 @@
+site_name: video-edit-cli
+site_description: Headless, project-agnostic video-editing workbench for AI agents.
+site_author: Kasper Junge
+repo_url: https://github.com/computerlovetech/video-edit-cli
+repo_name: computerlovetech/video-edit-cli
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.action.edit
+    - content.action.view
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+    - toc.follow
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/computerlovetech/video-edit-cli
+      name: video-edit-cli on GitHub
+  generator: false
+
+exclude_docs: |
+  diary/**
+  RESEARCH-EDITING-PIPELINE.md
+  VIDEO-EDITING-SKILL-ROADMAP.md
+
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+
+plugins:
+  - search:
+      separator: '[\s\-\._]+'
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - def_list
+  - attr_list
+  - toc:
+      permalink: true
+
+nav:
+  - Get started: index.md
+  - Concepts: concepts.md
+  - Workflows: workflows.md
+  - CLI reference: reference.md
+  - Agent skills: skills.md
