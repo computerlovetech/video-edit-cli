@@ -6,6 +6,11 @@
       "sourceType": "local",
       "computedHash": "0e33d4b51010aa6459f5adb315bf5c85fc38c757d298034cfc3a0c097fac1df4"
     },
+    "release": {
+      "source": "/Users/kasperjunge/Agent/Code/computerlovetech/private/video-edit-cli/skills/video-edit-cli-release",
+      "sourceType": "local",
+      "computedHash": "40cfd6bb182cc4b463cb16f0ccbe56b81c897b12617ac318a98c70566e177eaa"
+    },
     "video-editor": {
       "source": "/Users/kasperjunge/Agent/Code/computerlovetech/private/video-edit-cli/skills",
       "sourceType": "local",
