@@ -12,8 +12,6 @@ bundled skill that teaches it how to edit well.
 Works with any coding agent that supports skills:
 **Claude Code** · **Codex** · **Cursor** · **GitHub Copilot** · **Pi** · and others.
 
-![video-edit-cli demo](docs/assets/demo.gif)
-
 ## Get started in 60 seconds
 
 Install the `video-edit-cli` skill into your project with
