@@ -5,6 +5,59 @@ stdout and exits non-zero with a stable error code on failure.
 `video-edit-cli --help` (and `--help` on every subcommand) is the authoritative
 surface; this page mirrors it with context.
 
+## Installation
+
+Install the base CLI as a tool:
+
+```sh
+uv tool install video-edit-cli
+```
+
+Optional extras:
+
+```sh
+# Local transcription on Apple Silicon (mlx-whisper)
+uv tool install 'video-edit-cli[mlx]'
+
+# DeepFilterNet speech denoising (Python 3.11–3.12 only)
+uv tool install 'video-edit-cli[df]'
+```
+
+`ffmpeg` and `ffprobe` must be installed separately and available on `PATH`;
+commands fail with the stable error code `missing-binary` when they are absent.
+Verify your environment with [`doctor`](#doctor) before starting work.
+
+## Quickstart
+
+```sh
+# 1. Create a workspace and register the immutable source
+video-edit-cli workspace init --root /tmp/ep1 --source recording.mp4
+
+# 2. Inspect the media
+video-edit-cli probe --input recording.mp4
+
+# 3. Gather visual evidence for a range
+video-edit-cli filmstrip create --input recording.mp4 \
+  --start 60 --end 90 --output /tmp/ep1/analysis/strip.png --workspace /tmp/ep1
+
+# 4. Transcribe (Apple Silicon, requires the mlx extra)
+video-edit-cli transcript create --input recording.mp4 \
+  --output /tmp/ep1/transcripts/recording.json --workspace /tmp/ep1
+
+# 5. Author an edit-plan JSON yourself, then validate and render it
+video-edit-cli plan validate --plan /tmp/ep1/plans/main.json
+video-edit-cli render preview --plan /tmp/ep1/plans/main.json \
+  --output /tmp/ep1/renders/preview.mp4 --workspace /tmp/ep1
+```
+
+Every command prints a JSON envelope, so results compose in scripts:
+
+```sh
+video-edit-cli probe --input recording.mp4 | jq '.data.format.duration'
+```
+
+## Conventions
+
 Conventions used by many commands:
 
 - `--workspace WORKSPACE` — optional workspace root; records the derived
