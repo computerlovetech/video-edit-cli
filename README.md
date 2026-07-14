@@ -10,7 +10,7 @@ workbench — inspect, transcribe, cut, master, and package video — plus a
 bundled skill that teaches it how to edit well.
 
 Works with any coding agent that supports skills:
-**Claude Code** · **Codex** · **Cursor** · **Copilot** · **Amp** · **Pi** · and others.
+**Claude Code** · **Codex** · **Cursor** · **GitHub Copilot** · **Pi** · and others.
 
 ![video-edit-cli demo](docs/assets/demo.gif)
 
@@ -31,6 +31,9 @@ Then ask your agent to edit a recording:
 That's it. The skill guides the agent through the whole workflow — including
 installing the `video-edit-cli` CLI itself (`uv tool install video-edit-cli`)
 if it isn't on `PATH`. Only `ffmpeg`/`ffprobe` must be present separately.
+
+Runs on macOS and Linux. Windows is untested; use WSL. Local transcription
+(the `mlx` extra) requires Apple Silicon.
 
 More prompts that work well: [example prompts](docs/examples.md). Have a good
 one? Add it.
