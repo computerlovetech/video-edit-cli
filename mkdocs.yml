@@ -1,4 +1,5 @@
 site_name: video-edit-cli
+site_url: https://computerlovetech.github.io/video-edit-cli/
 site_description: Headless, project-agnostic video-editing workbench for AI agents.
 site_author: Kasper Junge
 repo_url: https://github.com/computerlovetech/video-edit-cli
