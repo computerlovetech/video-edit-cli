@@ -20,49 +20,15 @@ whole workflow — including installing the `video-edit-cli` CLI itself
 (`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg` and
 `ffprobe` must be installed separately.
 
-## Examples
+## Example prompts
 
-Things you can ask your agent once the skill is installed:
+A growing collection of prompts that work well. Have a good one? Add it.
 
-> Make highlight clips from this recording in vertical shorts format, with
-> matching post captions I can use on LinkedIn and YouTube Shorts. Burn the
-> subtitles into the video so it's clearly watchable without sound:
-> ./recordings/talk.mp4
+> Make clips for YouTube Shorts from this video, with burned-in subtitles:
+> https://youtu.be/r1Kh5WssSPg
 
-> Edit this podcast recording into a publishable episode: cut the false starts
-> and long pauses, clean up and master the audio, and give me an MP4 with
-> muxed subtitles.
-
-> Here are two camera angles and a separate mic track from the same session —
-> sync them and build a rough cut that follows whoever is speaking.
-
-> Inspect this file and tell me what's in it: duration, streams, loudness, and
-> whether the audio needs restoration before I publish it.
-
-The agent answers with evidence: every derived file it produces carries a
-provenance sidecar, and every render passes validation before it's presented.
-
-The rest of this page covers the CLI directly: its contract, manual
-installation, and a quickstart for driving it yourself.
-
-## The contract
-
-One `video-edit-cli` binary exposes atomic, non-interactive, project-agnostic
-subcommands that inspect and transform media deterministically. The agent (or
-you) plans the edit; the CLI supplies the mechanics.
-
-Every command follows the same rules:
-
-- **One JSON result envelope on stdout** per invocation; diagnostics go to
-  stderr; failures exit non-zero with a stable error code. See
-  [Concepts → Result envelope](concepts.md#result-envelope).
-- **Source media is immutable.** Commands never modify inputs. Every derived
-  file is new and gets a `*.provenance.json` sidecar recording inputs, hashes,
-  tool versions, parameters, and the exact ffmpeg commands that produced it.
-- **Nothing is implicit.** No command picks highlights, chooses a denoiser, or
-  discovers configuration. Editorial judgement and project identity come from
-  the caller — via edit plans and explicit
-  [project profiles](concepts.md#project-profiles).
+The rest of this page covers the CLI directly: manual installation and a
+quickstart for driving it yourself.
 
 ## Installation
 

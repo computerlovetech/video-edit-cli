@@ -20,24 +20,12 @@ whole workflow — including installing the `video-edit-cli` CLI itself
 (`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg`/`ffprobe`
 must be present separately.
 
-## Examples
+## Example prompts
 
-Things you can ask your agent once the skill is installed:
+A growing collection of prompts that work well. Have a good one? Add it.
 
-> Make highlight clips from this recording in vertical shorts format, with
-> matching post captions I can use on LinkedIn and YouTube Shorts. Burn the
-> subtitles into the video so it's clearly watchable without sound:
-> ./recordings/talk.mp4
-
-> Edit this podcast recording into a publishable episode: cut the false starts
-> and long pauses, clean up and master the audio, and give me an MP4 with
-> muxed subtitles.
-
-> Here are two camera angles and a separate mic track from the same session —
-> sync them and build a rough cut that follows whoever is speaking.
-
-> Inspect this file and tell me what's in it: duration, streams, loudness,
-> and whether the audio needs restoration before I publish it.
+> Make clips for YouTube Shorts from this video, with burned-in subtitles:
+> https://youtu.be/r1Kh5WssSPg
 
 ## How it works
 
