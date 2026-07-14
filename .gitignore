@@ -7,3 +7,8 @@ __pycache__/
 .claude/
 .worktrees/
 site/
+video-edit-projects/
+work/
+workspaces/
+docs/diary/
+.DS_Store

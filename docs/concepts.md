@@ -78,6 +78,12 @@ derived artifact in `workspace.json`. Sources are referred to by manifest id
 (`src-1`, `src-2`, …) in plans and notes, and can carry a `--role` label
 (`camera-a`, `screen`, `mic-guest`).
 
+The companion agent skill defaults new jobs to
+`<project-root>/video-edit-projects/YYYY-MM-DD-<source-id-or-slug>/`, with the CLI
+workspace in its `edit/` directory. This is a visible agent convention; the CLI
+itself continues to require explicit paths and honors any location chosen by the
+user.
+
 ## Edit plans
 
 A plan is an ordered keep-list, compiled deterministically to FFmpeg. Each

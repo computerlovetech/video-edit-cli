@@ -34,8 +34,11 @@ installed separately.
    capabilities apply.
    Resolve failed dependency checks before expensive work.
 3. **Set up a workspace.** Read [references/workspace.md](references/workspace.md),
-   then `video-edit-cli workspace init`. Done when `workspace.json` lists every
-   source with its hash.
+   announce the chosen project path, then reuse a matching project or run
+   `video-edit-cli workspace init`. Default to
+   `<project-root>/video-edit-projects/YYYY-MM-DD-<source-id-or-slug>/edit/`
+   unless the user specifies another location. Done when `workspace.json` lists
+   every source with its hash.
 4. **Inspect the media.** `probe` every source; gather audio, proxies, frames,
    filmstrips, waveforms, or range previews as decisions require. For dialogue
    media read [references/transcription.md](references/transcription.md) and
