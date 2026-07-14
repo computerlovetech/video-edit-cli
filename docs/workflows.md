@@ -6,6 +6,10 @@ act, then validate. Paths below assume a workspace at `$WS`.
 
 ## Main edit (dialogue-driven rough cut)
 
+To edit a talk or podcast recording from the command line, transcribe it,
+author an edit plan from the transcript, then validate, render, and review the
+cut:
+
 ```sh
 video-edit-cli doctor --workflow transcription
 video-edit-cli workspace init --root $WS --source recording.mp4
@@ -38,6 +42,9 @@ plan (`parent_plan` set), re-validating, and re-rendering.
 
 ## Packaged master (profile, subtitles, final checks)
 
+To produce a final deliverable with subtitles, render against a project
+profile, derive SRT/VTT from the render manifest, and validate the output:
+
 ```sh
 video-edit-cli render master --plan $WS/plans/final.json \
   --profile ./project.yaml --profile-name youtube-1080p \
@@ -67,6 +74,8 @@ sanity-checked before use with `asset inspect --input <path>`.
 
 ## Vertical short from a long-form source
 
+To turn a long recording into a vertical 9:16 short from the command line,
+choose a range, preview the reframe, derive a vertical plan, and render it.
 `short create-plan` never picks highlights — you choose the range (from the
 transcript or inspection) and state the editorial reason.
 
@@ -95,6 +104,10 @@ tight cues (`--max-words` / `--max-chars`) and burn them with
 
 ## Audio restoration and mastering
 
+To denoise and loudness-normalize a recording's audio from the command line,
+extract it, analyze it, denoise with an explicit backend, compare candidates,
+then master and re-attach the winner:
+
 ```sh
 video-edit-cli doctor --workflow audio-restoration   # verifies the DF/Torch chain
 
@@ -122,6 +135,9 @@ video-edit-cli audio replace --video recording.mp4 \
 target speech delivery; override with `--target-lufs`, `--true-peak`, `--lra`).
 
 ## Multi-camera / separate-audio sync
+
+To sync two cameras or a separate audio recorder from the command line,
+estimate the offset from the audio, review it, and apply it:
 
 ```sh
 video-edit-cli sync analyze --reference camera-a.mp4 --other mic.wav

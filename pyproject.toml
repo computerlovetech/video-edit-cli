@@ -1,12 +1,26 @@
 [project]
 name = "video-edit-cli"
 version = "0.1.2"
-description = "Headless, project-agnostic video-editing CLI with atomic subcommands for AI agents."
+description = "Video editing for AI agents: cut podcasts, make YouTube Shorts with subtitles, sync multicam, master audio — headless, local, open source."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
-keywords = ["video", "editing", "ffmpeg", "agents", "cli"]
+keywords = [
+    "video",
+    "editing",
+    "ffmpeg",
+    "agents",
+    "cli",
+    "ai-agents",
+    "claude-code",
+    "agent-skills",
+    "youtube-shorts",
+    "podcast-editing",
+    "subtitles",
+    "transcription",
+    "whisper",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",

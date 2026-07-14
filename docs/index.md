@@ -1,10 +1,14 @@
 # video-edit-cli
 
-A video-editing tool for AI agents. Your agent gets a headless editing
-workbench — inspect, transcribe, cut, master, and package video — plus a
-bundled [skill](skills.md) that teaches it how to edit well. It works with any
-coding agent that supports skills: Claude Code, Codex, Pi, Cursor, Copilot,
-Amp, and others.
+Turn raw recordings into published videos with your AI agent. video-edit-cli
+gives your agent a headless editing workbench — inspect, transcribe, cut,
+master, and package video — plus a bundled [skill](skills.md) that teaches it
+how to edit well: edit a podcast into an episode, cut YouTube Shorts with
+burned-in subtitles, sync multi-camera shoots, restore audio. Open source,
+runs locally, no watermarks, no per-clip credits.
+
+It works with any coding agent that supports skills: Claude Code, Codex, Pi,
+Cursor, Copilot, Amp, and others.
 
 ## Get started
 
