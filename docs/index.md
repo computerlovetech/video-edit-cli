@@ -6,11 +6,11 @@ bundled [skill](skills.md) that teaches it how to edit well.
 
 ## Get started
 
-Install the `video-editor` skill into your project with
+Install the `video-edit-cli` skill into your project with
 [skills.sh](https://skills.sh):
 
 ```sh
-npx skills add computerlovetech/video-edit-cli --skill video-editor
+npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
 Then ask your agent to edit a recording. The skill guides the agent through the

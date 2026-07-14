@@ -4,7 +4,7 @@ This repository contains two independently useful but coordinated artifacts:
 
 - The `video-edit-cli` Python package and executable provide deterministic,
   project-agnostic media operations.
-- `skills/video-editor/` teaches AI agents how to compose those operations into an
+- `skills/video-edit-cli/` teaches AI agents how to compose those operations into an
   evidence-based editing workflow.
 
 Keep project identity, brand defaults, editorial voice, and publishing credentials out

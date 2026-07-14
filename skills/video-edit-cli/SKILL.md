@@ -1,5 +1,5 @@
 ---
-name: video-editor
+name: video-edit-cli
 description: Edit, inspect, transcribe, cut, master, or package video and audio media with the headless `video-edit-cli` CLI. Use when the user asks to edit a recording, cut a video, inspect unfamiliar media, extract audio, preview a range, synchronize cameras, make a vertical clip, or produce podcast/episode deliverables.
 ---
 

@@ -11,7 +11,7 @@ The recommended path is [skills.sh](https://skills.sh) — no prior CLI install
 needed; the skill has the agent install the CLI when it's missing:
 
 ```sh
-npx skills add computerlovetech/video-edit-cli --skill video-editor
+npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
 If the CLI is already installed, the bundled copy can be installed directly:
@@ -25,12 +25,12 @@ video-edit-cli skills install --target <dir>
 They can also be managed with [agr](https://agr.run):
 
 ```sh
-agr add computerlovetech/video-edit-cli/video-editor
+agr add computerlovetech/video-edit-cli/video-edit-cli
 ```
 
 ## What the skills cover
 
-**video-editor** is the core method skill. Its invariants apply to every task:
+**video-edit-cli** is the core method skill. Its invariants apply to every task:
 
 - Source media is immutable; every derived file keeps its provenance sidecar.
 - Evidence before edits: never act on a range that hasn't been inspected via
@@ -43,7 +43,7 @@ It walks the agent through the workflow described in
 cut review, and final validation — with branch references for audio
 restoration, packaged deliverables, multi-camera work, and vertical video.
 
-**create-clips** builds on video-editor: it derives several publishable social
+**create-clips** builds on video-edit-cli: it derives several publishable social
 clips (YouTube Shorts, standard YouTube videos, LinkedIn) from a long-form
 recording after a main edit exists. It is distributed via agr rather than in
 the wheel.

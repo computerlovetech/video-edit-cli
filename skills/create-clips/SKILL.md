@@ -1,12 +1,12 @@
 ---
 name: create-clips
-description: Derive several publishable social clips (YouTube Shorts, standard YouTube videos, LinkedIn) from a long-form recording — podcast episode, interview, vlog, talk, or livestream. Use when the user asks to make clips, shorts, highlights, or teasers from a video, especially after a main edit already exists. Builds on the video-editor skill and the video-edit-cli CLI.
+description: Derive several publishable social clips (YouTube Shorts, standard YouTube videos, LinkedIn) from a long-form recording — podcast episode, interview, vlog, talk, or livestream. Use when the user asks to make clips, shorts, highlights, or teasers from a video, especially after a main edit already exists. Builds on the video-edit-cli skill and the video-edit-cli CLI.
 ---
 
 You turn one long recording into a small set of clips worth publishing, each
-packaged with everything needed to post it. The `video-editor` skill and the
+packaged with everything needed to post it. The `video-edit-cli` skill and the
 `video-edit-cli` CLI are your workbench for all media mechanics; this skill owns
-the clip-release workflow. Read the `video-editor` skill first if it is not
+the clip-release workflow. Read the `video-edit-cli` skill first if it is not
 already loaded — its invariants (immutable sources, evidence before edits,
 validate before rendering) all apply here.
 
@@ -14,7 +14,7 @@ validate before rendering) all apply here.
 
 Establish these before cutting anything; ask only for what you cannot infer.
 
-- **Source**: an existing video-editor workspace (preferred — reuse its
+- **Source**: an existing video-edit-cli workspace (preferred — reuse its
   transcript, plans, and hashes) or standalone media (then `workspace init` first).
 - **Clip count**: default 3–5 if unspecified.
 - **Full-episode URL**: needed for descriptions; use a `[LINK]` placeholder and
@@ -28,7 +28,7 @@ Establish these before cutting anything; ask only for what you cannot infer.
 ## Method
 
 1. **Know the material.** Reuse the workspace transcript if present; otherwise
-   transcribe (see the video-editor transcription reference). Skim the full
+   transcribe (see the video-edit-cli transcription reference). Skim the full
    transcript before selecting anything.
 2. **Select moments editorially.** Choose self-contained segments with a hook in
    the first seconds, one clear idea, and a natural ending — a claim, a result, a

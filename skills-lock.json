@@ -11,10 +11,10 @@
       "sourceType": "local",
       "computedHash": "40cfd6bb182cc4b463cb16f0ccbe56b81c897b12617ac318a98c70566e177eaa"
     },
-    "video-editor": {
+    "video-edit-cli": {
       "source": "/Users/kasperjunge/Agent/Code/computerlovetech/private/video-edit-cli/skills",
       "sourceType": "local",
-      "computedHash": "ea96f2442cf3367d72010c04c3ab60ff9b877cbc7339b6ca48e7d8a35f47636b"
+      "computedHash": "6a661ab59ea9a4bfa999d799673659a5db2dd6fd26d4d65c91c32d83c9544af9"
     }
   }
 }

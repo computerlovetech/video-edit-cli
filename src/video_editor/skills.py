@@ -9,7 +9,7 @@ from video_editor.errors import VideoEditorError
 
 # Skills shipped with the CLI. Must match the force-include entries in
 # pyproject.toml; repository-only skills are distributed via agr instead.
-SHIPPED_SKILLS = ("video-editor",)
+SHIPPED_SKILLS = ("video-edit-cli",)
 
 
 def bundled_skills_dir() -> Path:

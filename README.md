@@ -6,11 +6,11 @@ bundled skill that teaches it how to edit well.
 
 ## Get started
 
-Install the `video-editor` skill into your project with
+Install the `video-edit-cli` skill into your project with
 [skills.sh](https://skills.sh):
 
 ```sh
-npx skills add computerlovetech/video-edit-cli --skill video-editor
+npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
 Then ask your agent to edit a recording. The skill guides the agent through the
@@ -54,11 +54,11 @@ uv run video-edit-cli filmstrip create --input recording.mp4 \
   --start 60 --end 90 --output /tmp/ep1/analysis/strip.png --workspace /tmp/ep1
 ```
 
-The companion skill in `skills/video-editor/` teaches agents the editing method;
+The companion skill in `skills/video-edit-cli/` teaches agents the editing method;
 this package owns the mechanics. Besides skills.sh (see Get started), the skill
 also ships inside the package — `video-edit-cli skills install` copies it into
 `.claude/skills/` (or `--target <dir>`) — and can be managed with agr:
-`agr add computerlovetech/video-edit-cli/video-editor`.
+`agr add computerlovetech/video-edit-cli/video-edit-cli`.
 Skills in `skills/` that are not listed in `video_editor.skills.SHIPPED_SKILLS`
 (and the matching force-include entries in `pyproject.toml`) are agr-only and do
 not ship in the wheel. Tests generate small deterministic fixtures at

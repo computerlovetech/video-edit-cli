@@ -15,7 +15,7 @@ def test_list_reports_every_shipped_skill() -> None:
 
 def test_install_copies_skills_and_replaces_stale_copies(tmp_path: Path) -> None:
     target = tmp_path / ".claude" / "skills"
-    stale = target / "video-editor"
+    stale = target / "video-edit-cli"
     stale.mkdir(parents=True)
     (stale / "obsolete.md").write_text("stale")
 
@@ -23,9 +23,9 @@ def test_install_copies_skills_and_replaces_stale_copies(tmp_path: Path) -> None
     assert code == 0
     installed = envelope["data"]["installed"]
     assert [entry["name"] for entry in installed] == list(skills.SHIPPED_SKILLS)
-    assert (target / "video-editor" / "SKILL.md").is_file()
-    assert (target / "video-editor" / "references").is_dir()
-    assert not (target / "video-editor" / "obsolete.md").exists()
+    assert (target / "video-edit-cli" / "SKILL.md").is_file()
+    assert (target / "video-edit-cli" / "references").is_dir()
+    assert not (target / "video-edit-cli" / "obsolete.md").exists()
 
 
 def test_shipped_skills_match_wheel_force_include() -> None:

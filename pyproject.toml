@@ -57,7 +57,7 @@ packages = ["src/video_editor"]
 # the canonical copies stay in the repository-root skills/ directory, and only
 # the listed skills are bundled. Development-only skills must not be added here.
 [tool.hatch.build.targets.wheel.force-include]
-"skills/video-editor" = "video_editor/skills/video-editor"
+"skills/video-edit-cli" = "video_editor/skills/video-edit-cli"
 
 [tool.hatch.build.targets.sdist]
 include = ["src", "skills", "tests", "README.md", "pyproject.toml"]
