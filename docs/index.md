@@ -20,15 +20,10 @@ whole workflow — including installing the `video-edit-cli` CLI itself
 (`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg` and
 `ffprobe` must be installed separately.
 
-## Example prompts
-
-A growing collection of prompts that work well. Have a good one? Add it.
-
-> Make clips for YouTube Shorts from this video, with burned-in subtitles:
-> https://youtu.be/r1Kh5WssSPg
-
 ## Where next
 
+- [Example prompts](examples.md) — prompts that work well; a growing
+  collection.
 - [Concepts](concepts.md) — workspaces, provenance, result envelopes, edit
   plans, project profiles.
 - [Workflows](workflows.md) — recipes for a main edit, a vertical short, audio

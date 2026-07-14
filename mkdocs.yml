@@ -76,6 +76,7 @@ markdown_extensions:
 
 nav:
   - Get started: index.md
+  - Example prompts: examples.md
   - Concepts: concepts.md
   - Workflows: workflows.md
   - CLI reference: reference.md
