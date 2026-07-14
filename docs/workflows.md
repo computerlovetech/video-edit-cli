@@ -1,3 +1,11 @@
+---
+title: "Workflows: podcast edits, Shorts, multicam, mastering"
+description: >-
+  Step-by-step command-line recipes — edit a podcast into an episode, cut
+  vertical Shorts with subtitles, sync multi-camera shoots, restore and
+  master audio.
+---
+
 # Workflows
 
 Recipes composing the primitives into common deliverables. All of them follow

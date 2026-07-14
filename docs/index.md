@@ -1,3 +1,11 @@
+---
+title: Video editing for AI agents
+description: >-
+  Open-source CLI that lets AI coding agents edit video — podcasts, YouTube
+  Shorts with burned-in subtitles, multicam sync, audio mastering. Runs
+  locally with Claude Code, Codex, Cursor, and more.
+---
+
 # video-edit-cli
 
 Turn raw recordings into published videos with your AI agent. video-edit-cli
