@@ -16,10 +16,15 @@ def measure_loudness(
     target_i: float = -16.0,
     target_tp: float = -1.5,
     target_lra: float = 11.0,
+    pre_filters: list[str] | None = None,
 ) -> dict[str, Any]:
-    """First-pass loudnorm measurement: integrated LUFS, true peak, LRA, threshold."""
+    """Measure loudness, optionally after deterministic preprocessing filters."""
     if not path.is_file():
         raise InvalidInputError(f"input file not found: {path}")
+    filters = [
+        *(pre_filters or []),
+        f"loudnorm=I={target_i}:TP={target_tp}:LRA={target_lra}:print_format=json",
+    ]
     proc = ffmpeg.run(
         "ffmpeg",
         [
@@ -28,7 +33,7 @@ def measure_loudness(
             "-i",
             str(path),
             "-af",
-            f"loudnorm=I={target_i}:TP={target_tp}:LRA={target_lra}:print_format=json",
+            ",".join(filters),
             "-f",
             "null",
             "-",

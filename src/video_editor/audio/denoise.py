@@ -11,7 +11,7 @@ import importlib
 from pathlib import Path
 from typing import Any, Protocol
 
-from video_editor.errors import InvalidInputError, VideoEditorError
+from video_editor.errors import InvalidInputError, ToolFailureError, VideoEditorError
 
 
 class DenoiseBackend(Protocol):
@@ -28,17 +28,32 @@ class DeepFilterNetBackend:
     def denoise(self, source: Path, output: Path) -> dict[str, Any]:
         try:
             enhance_mod = importlib.import_module("df.enhance")
-        except ImportError as exc:
+        except ModuleNotFoundError as exc:
+            missing = exc.name or "unknown module"
             raise VideoEditorError(
                 "missing-dependency",
-                "the deepfilternet backend requires the optional 'df' extra; "
-                "install with `uv sync --extra df`",
+                f"the deepfilternet backend could not import '{missing}'; "
+                "install a compatible audio-restoration environment and run "
+                "`video-edit-cli doctor --workflow audio-restoration`",
                 exit_code=5,
             ) from exc
-        model, df_state, _ = enhance_mod.init_df()
-        audio, _ = enhance_mod.load_audio(str(source), sr=df_state.sr())
-        enhanced = enhance_mod.enhance(model, df_state, audio)
-        enhance_mod.save_audio(str(output), enhanced, df_state.sr())
+        except ImportError as exc:
+            raise VideoEditorError(
+                "incompatible-dependency",
+                f"the deepfilternet backend import failed: {exc}; run "
+                "`video-edit-cli doctor --workflow audio-restoration`",
+                exit_code=5,
+            ) from exc
+        try:
+            model, df_state, _ = enhance_mod.init_df()
+            audio, _ = enhance_mod.load_audio(str(source), sr=df_state.sr())
+            enhanced = enhance_mod.enhance(model, df_state, audio)
+            enhance_mod.save_audio(str(output), enhanced, df_state.sr())
+        except Exception as exc:
+            raise ToolFailureError(
+                f"deepfilternet failed while processing '{source}': "
+                f"{type(exc).__name__}: {exc}"
+            ) from exc
         return {"model": "DeepFilterNet3", "sample_rate": df_state.sr()}
 
 

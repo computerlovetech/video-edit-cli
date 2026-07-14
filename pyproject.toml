@@ -22,7 +22,12 @@ dependencies = [
 
 [project.optional-dependencies]
 mlx = ["mlx-whisper>=0.4"]
-df = ["deepfilternet>=0.5"]
+df = [
+    "deepfilternet>=0.5; python_version < '3.13'",
+    "soundfile>=0.12; python_version < '3.13'",
+    "torch>=2.2,<2.3; python_version < '3.13'",
+    "torchaudio>=2.2,<2.3; python_version < '3.13'",
+]
 
 [project.scripts]
 video-edit-cli = "video_editor.cli:main"

@@ -18,6 +18,10 @@ Install the base CLI with `uv tool install video-edit-cli`. For local Apple Sili
 transcription, install `uv tool install 'video-edit-cli[mlx]'`. FFmpeg and FFprobe must
 be installed separately and available on `PATH`.
 
+DeepFilterNet restoration uses the optional `df` extra on Python 3.11–3.12. Run
+`video-edit-cli doctor --workflow audio-restoration` before denoising to verify the
+complete local Torch, Torchaudio, decoding-backend, and DeepFilterNet import chain.
+
 Usage discovery: `video-edit-cli --help` and `--help` on every subcommand. Inside this
 repository, prefix commands with `uv run`.
 

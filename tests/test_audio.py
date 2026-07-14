@@ -41,8 +41,8 @@ def test_audio_master_hits_targets(audio_only: Path, tmp_path: Path) -> None:
     )
     assert code == 0
     metrics = envelope["data"]["output"]
-    assert metrics["integrated_lufs"] == pytest.approx(-16.0, abs=1.5)
-    assert metrics["true_peak_dbtp"] <= -1.0
+    assert metrics["integrated_lufs"] == pytest.approx(-16.0, abs=0.2)
+    assert metrics["true_peak_dbtp"] <= -1.5
     stream = media.probe(out)["streams"][0]
     assert stream["codec"] == "pcm_s24le"
     assert stream["sample_rate"] == 48000
@@ -64,7 +64,19 @@ def test_audio_master_rejects_lossy_output(audio_only: Path, tmp_path: Path) -> 
     assert "lossless" in envelope["error"]["message"]
 
 
-def test_audio_denoise_missing_dependency(audio_only: Path, tmp_path: Path) -> None:
+def test_audio_denoise_missing_dependency(
+    audio_only: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import importlib
+
+    real_import = importlib.import_module
+
+    def missing_df(name: str, package: str | None = None) -> Any:
+        if name == "df.enhance":
+            raise ModuleNotFoundError("No module named 'df'", name="df")
+        return real_import(name, package)
+
+    monkeypatch.setattr(importlib, "import_module", missing_df)
     code, envelope = run_cli(
         [
             "audio",
@@ -80,6 +92,7 @@ def test_audio_denoise_missing_dependency(audio_only: Path, tmp_path: Path) -> N
     # DeepFilterNet is not installed in the test environment
     assert code == 5
     assert envelope["error"]["code"] == "missing-dependency"
+    assert "could not import 'df'" in envelope["error"]["message"]
 
 
 def test_audio_denoise_with_fake_backend(
@@ -203,3 +216,77 @@ def test_audio_compare_needs_two_inputs(audio_only: Path, tmp_path: Path) -> Non
     )
     assert code != 0
     assert "at least two" in envelope["error"]["message"]
+
+
+def test_audio_replace_copies_video_and_tracks_both_inputs(
+    main_video: Path, audio_only: Path, tmp_path: Path
+) -> None:
+    import json
+
+    out = tmp_path / "replaced.mp4"
+    code, envelope = run_cli(
+        [
+            "audio",
+            "replace",
+            "--video",
+            str(main_video),
+            "--audio",
+            str(audio_only),
+            "--output",
+            str(out),
+        ]
+    )
+    assert code == 0
+    assert out.is_file()
+    streams = media.probe(out)["streams"]
+    assert {stream["type"] for stream in streams} == {"video", "audio"}
+    video = next(stream for stream in streams if stream["type"] == "video")
+    source_video = next(
+        stream
+        for stream in media.probe(main_video)["streams"]
+        if stream["type"] == "video"
+    )
+    assert video["codec"] == source_video["codec"]
+    sidecar = json.loads((tmp_path / "replaced.mp4.provenance.json").read_text())
+    assert [entry["path"] for entry in sidecar["inputs"]] == [
+        str(main_video),
+        str(audio_only),
+    ]
+    assert envelope["data"]["duration_difference"] < 0.1
+
+
+def test_audio_replace_rejects_misaligned_duration(
+    main_video: Path, audio_only: Path, tmp_path: Path
+) -> None:
+    import subprocess
+
+    short = tmp_path / "short.wav"
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-hide_banner",
+            "-nostdin",
+            "-y",
+            "-i",
+            str(audio_only),
+            "-t",
+            "2",
+            str(short),
+        ],
+        check=True,
+        capture_output=True,
+    )
+    code, envelope = run_cli(
+        [
+            "audio",
+            "replace",
+            "--video",
+            str(main_video),
+            "--audio",
+            str(short),
+            "--output",
+            str(tmp_path / "bad.mp4"),
+        ]
+    )
+    assert code != 0
+    assert "duration difference" in envelope["error"]["message"]

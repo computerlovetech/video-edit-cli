@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 import importlib.util
 from typing import Any
 
@@ -9,7 +10,7 @@ from video_editor import ffmpeg
 from video_editor.errors import VideoEditorError
 
 
-WORKFLOWS = ("base", "transcription", "vertical-captioned")
+WORKFLOWS = ("base", "transcription", "vertical-captioned", "audio-restoration")
 
 
 def _binary_check(name: str) -> dict[str, Any]:
@@ -54,6 +55,28 @@ def _python_module_check(module: str, install_hint: str) -> dict[str, Any]:
     }
 
 
+def _python_import_check(module: str, install_hint: str) -> dict[str, Any]:
+    try:
+        imported = importlib.import_module(module)
+        detail = f"{module} imports successfully"
+        if module == "torchaudio":
+            backends = imported.list_audio_backends()
+            if not backends:
+                return {
+                    "name": f"python-import:{module}",
+                    "passed": False,
+                    "detail": "torchaudio has no decoding backend; install soundfile",
+                }
+            detail += f" with backends: {', '.join(backends)}"
+        return {"name": f"python-import:{module}", "passed": True, "detail": detail}
+    except Exception as exc:
+        return {
+            "name": f"python-import:{module}",
+            "passed": False,
+            "detail": f"{install_hint} ({type(exc).__name__}: {exc})",
+        }
+
+
 def inspect(workflow: str) -> dict[str, Any]:
     """Return non-mutating readiness checks for one editing workflow."""
     checks = [_binary_check("ffmpeg"), _binary_check("ffprobe")]
@@ -66,6 +89,12 @@ def inspect(workflow: str) -> dict[str, Any]:
         )
     if workflow == "vertical-captioned":
         checks.append(_ffmpeg_filter_check("subtitles"))
+    if workflow == "audio-restoration":
+        hint = "install a compatible environment with `uv sync --extra df`"
+        checks.extend(
+            _python_import_check(module, hint)
+            for module in ("torch", "torchaudio", "soundfile", "df.enhance")
+        )
     return {
         "workflow": workflow,
         "passed": all(check["passed"] for check in checks),

@@ -26,14 +26,18 @@ def master(
     """Two-pass loudnorm mastering chain; returns (ffmpeg args, result metrics)."""
     if output.suffix.lower() != ".wav":
         raise InvalidInputError("audio master output must be a .wav path (lossless)")
-    measured = measure_loudness(source, target_i, target_tp, target_lra)["raw"]
-    output.parent.mkdir(parents=True, exist_ok=True)
-
-    chain = [f"highpass=f={highpass_hz}"]
+    preprocessing = [f"highpass=f={highpass_hz}"]
     if compress:
-        chain.append(
+        preprocessing.append(
             "acompressor=threshold=-18dB:ratio=2:attack=15:release=200:makeup=2"
         )
+    source_measured = measure_loudness(source, target_i, target_tp, target_lra)["raw"]
+    measured = measure_loudness(
+        source, target_i, target_tp, target_lra, pre_filters=preprocessing
+    )["raw"]
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    chain = list(preprocessing)
     chain.append(
         "loudnorm=I={i}:TP={tp}:LRA={lra}:measured_I={mi}:measured_TP={mtp}:"
         "measured_LRA={mlra}:measured_thresh={mth}:offset={off}:linear=true".format(
@@ -68,8 +72,10 @@ def master(
             "lra": target_lra,
         },
         "input": {
-            "integrated_lufs": float(measured["input_i"]),
-            "true_peak_dbtp": float(measured["input_tp"]),
+            "integrated_lufs": float(source_measured["input_i"]),
+            "true_peak_dbtp": float(source_measured["input_tp"]),
+            "integrated_lufs_after_preprocessing": float(measured["input_i"]),
+            "true_peak_dbtp_after_preprocessing": float(measured["input_tp"]),
         },
         "output": {k: v for k, v in result_loudness.items() if k != "raw"},
         "chain": chain,

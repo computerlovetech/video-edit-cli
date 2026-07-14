@@ -31,6 +31,7 @@ from video_editor.audio import analysis as audio_analysis
 from video_editor.audio import comparison as audio_comparison
 from video_editor.audio import denoise as audio_denoise
 from video_editor.audio import mastering as audio_mastering
+from video_editor.audio import replacement as audio_replacement
 from video_editor.errors import VideoEditorError
 from video_editor.transcription import base as transcription_base
 from video_editor.transcription import views as transcript_views
@@ -359,6 +360,31 @@ def cmd_audio_compare(
     ]
     artifacts.append(result.artifact(report["report_path"], "compare-report"))
     return report, artifacts
+
+
+def cmd_audio_replace(
+    args: argparse.Namespace,
+) -> tuple[dict[str, Any], list[dict[str, str]]]:
+    video, audio, output = Path(args.video), Path(args.audio), Path(args.output)
+    tool_args, details = audio_replacement.replace(
+        video,
+        audio,
+        output,
+        audio_codec=args.audio_codec,
+        audio_bitrate=args.audio_bitrate,
+        duration_tolerance=args.duration_tolerance,
+    )
+    sidecar = provenance.write_sidecar(
+        output, "audio replace", [video, audio], details, [["ffmpeg", *tool_args]]
+    )
+    _register_if_workspace(args, output, "video-audio-replaced", "audio replace")
+    return (
+        {"output": str(output), **details},
+        [
+            result.artifact(output, "video-audio-replaced"),
+            result.artifact(sidecar, "provenance"),
+        ],
+    )
 
 
 def cmd_render_master(
@@ -714,6 +740,27 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare.add_argument("--duration", type=float, default=12.0, help="excerpt seconds")
     compare.set_defaults(handler=cmd_audio_compare, command_name="audio compare")
+
+    replace = audio.add_parser(
+        "replace", help="replace a video's audio stream while copying its video"
+    )
+    replace.add_argument(
+        "--video", required=True, help="video whose video stream is kept"
+    )
+    replace.add_argument("--audio", required=True, help="replacement audio input")
+    replace.add_argument("--output", required=True, help="new output video path")
+    replace.add_argument("--audio-codec", default="aac", help="output audio codec")
+    replace.add_argument("--audio-bitrate", default="192k", help="output audio bitrate")
+    replace.add_argument(
+        "--duration-tolerance",
+        type=float,
+        default=0.1,
+        help="maximum allowed audio/video duration difference in seconds",
+    )
+    replace.add_argument(
+        "--workspace", help="optional workspace root; records the derived artifact"
+    )
+    replace.set_defaults(handler=cmd_audio_replace, command_name="audio replace")
 
     proxy = top.add_parser("proxy", help="inspection proxies").add_subparsers(
         dest="action", required=True

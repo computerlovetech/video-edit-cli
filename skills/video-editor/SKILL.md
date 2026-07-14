@@ -26,7 +26,8 @@ command surface; inside this repository run it as `uv run video-edit-cli …`.
    media exists. Done when you can name the requested outputs and every source
    file involved.
 2. **Preflight the workflow.** Run `video-edit-cli doctor --workflow base`, or
-   use `transcription` / `vertical-captioned` when those capabilities apply.
+   use `transcription`, `vertical-captioned`, or `audio-restoration` when those
+   capabilities apply.
    Resolve failed dependency checks before expensive work.
 3. **Set up a workspace.** Read [references/workspace.md](references/workspace.md),
    then `video-edit-cli workspace init`. Done when `workspace.json` lists every
