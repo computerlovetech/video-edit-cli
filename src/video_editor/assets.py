@@ -60,6 +60,7 @@ def validate_output(
     loudness_tolerance: float = 1.5,
     expect_subtitles: bool = False,
     subtitle_file: Path | None = None,
+    expect_canvas: tuple[int, int] | None = None,
 ) -> dict[str, Any]:
     """Check a final render against expected streams, canvas, duration, loudness."""
     info = media.probe(path)
@@ -72,6 +73,15 @@ def validate_output(
 
     video = next((s for s in info["streams"] if s["type"] == "video"), None)
     checks: dict[str, Any] = {"streams": types}
+
+    if expect_canvas and video:
+        actual_canvas = (video["width"], video["height"])
+        checks["canvas"] = f"{video['width']}x{video['height']}@{video['frame_rate']}"
+        if actual_canvas != expect_canvas:
+            issues.append(
+                f"canvas {video['width']}x{video['height']} != "
+                f"expected {expect_canvas[0]}x{expect_canvas[1]}"
+            )
 
     if profile and video:
         canvas = profile["canvas"]
@@ -130,4 +140,14 @@ def validate_output(
                 f"subtitle timing runs to {last_end:.3f}s beyond output duration {duration:.3f}s"
             )
 
-    return {"path": str(path), "passed": not issues, "issues": issues, "checks": checks}
+    return {
+        "path": str(path),
+        "passed": not issues,
+        "validation_scope": {
+            "technical": "performed",
+            "visual_framing": "not_performed",
+            "editorial": "not_performed",
+        },
+        "issues": issues,
+        "checks": checks,
+    }

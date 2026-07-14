@@ -32,21 +32,39 @@ def list_cuts(manifest: dict[str, Any]) -> list[dict[str, Any]]:
     cuts = []
     for i in range(len(segments) - 1):
         before, after = segments[i], segments[i + 1]
+        same_source = before["source"] == after["source"]
+        source_continuous = same_source and abs(before["out"] - after["in"]) < 0.001
+        transform_changed = any(
+            before.get(field) != after.get(field)
+            for field in ("crop", "video_source", "gain_db")
+        )
+        if source_continuous and transform_changed:
+            boundary_type = "transform"
+        elif source_continuous:
+            boundary_type = "continuous"
+        elif same_source:
+            boundary_type = "temporal-cut"
+        else:
+            boundary_type = "source-switch"
         cuts.append(
             {
                 "cut_index": i,
+                "boundary_type": boundary_type,
+                "source_continuous": source_continuous,
                 "output_time": before["output_end"],
                 "before": {
                     "segment_index": before["index"],
                     "source": before["source"],
                     "source_out": before["out"],
                     "reason": before["reason"],
+                    "crop": before.get("crop"),
                 },
                 "after": {
                     "segment_index": after["index"],
                     "source": after["source"],
                     "source_in": after["in"],
                     "reason": after["reason"],
+                    "crop": after.get("crop"),
                 },
             }
         )
@@ -141,14 +159,22 @@ def inspect_cut(
     transcript = (
         transcript_views.load_transcript(transcript_path) if transcript_path else None
     )
-    clipped_before = _clipped_word(transcript, cut["before"]["source_out"])
-    clipped_after = _clipped_word(transcript, cut["after"]["source_in"])
+    check_words = not cut["source_continuous"]
+    clipped_before = (
+        _clipped_word(transcript, cut["before"]["source_out"]) if check_words else None
+    )
+    clipped_after = (
+        _clipped_word(transcript, cut["after"]["source_in"]) if check_words else None
+    )
 
     checks = {
         "black_frames_near_cut": [float(t) + start for t in black_events],
         "silence_near_cut": [float(t) + start for t in silence_events],
         "clipped_word_before": clipped_before,
         "clipped_word_after": clipped_after,
+        "clipped_word_check": "skipped-continuous-source"
+        if not check_words
+        else "performed",
     }
     passed = (
         not checks["black_frames_near_cut"]

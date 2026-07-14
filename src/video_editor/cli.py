@@ -12,6 +12,7 @@ import json
 from video_editor import (
     __version__,
     assets,
+    diagnostics,
     inspection,
     media,
     plans,
@@ -268,18 +269,30 @@ def cmd_cut_inspect(
     args: argparse.Namespace,
 ) -> tuple[dict[str, Any], list[dict[str, str]]]:
     manifest = review.load_manifest(Path(args.manifest))
-    report = review.inspect_cut(
-        manifest,
-        args.cut,
-        Path(args.output_dir),
-        args.window,
-        Path(args.transcript) if args.transcript else None,
-    )
-    artifacts = [
-        result.artifact(path, kind) for kind, path in report["artifacts"].items()
+    cut_indexes = range(len(review.list_cuts(manifest))) if args.all else [args.cut]
+    reports = [
+        review.inspect_cut(
+            manifest,
+            cut_index,
+            Path(args.output_dir),
+            args.window,
+            Path(args.transcript) if args.transcript else None,
+        )
+        for cut_index in cut_indexes
     ]
-    artifacts.append(result.artifact(report["report_path"], "cut-report"))
-    return report, artifacts
+    artifacts: list[dict[str, str]] = []
+    for report in reports:
+        artifacts.extend(
+            result.artifact(path, kind) for kind, path in report["artifacts"].items()
+        )
+        artifacts.append(result.artifact(report["report_path"], "cut-report"))
+    if args.all:
+        return {
+            "cut_count": len(reports),
+            "passed": all(report["passed"] for report in reports),
+            "reports": reports,
+        }, artifacts
+    return reports[0], artifacts
 
 
 def cmd_audio_analyze(
@@ -399,6 +412,12 @@ def cmd_subtitles_create(
             source_id = matches[0]
         transcripts[source_id] = document
     cues = subtitles.map_cues(transcripts, manifest["segments"])
+    cues = subtitles.reflow_cues(
+        cues,
+        max_words=args.max_words,
+        max_chars=args.max_chars,
+        max_duration=args.max_duration,
+    )
     if not cues:
         raise VideoEditorError(
             "invalid-input",
@@ -432,17 +451,35 @@ def cmd_subtitles_render(
         Path(args.subtitles),
         Path(args.output),
     )
-    tool_args = subtitles.render_subtitles(video, subtitle_file, output, args.mode)
+    style_fields = {
+        "FontName": args.font,
+        "FontSize": args.font_size,
+        "PrimaryColour": args.primary_color,
+        "OutlineColour": args.outline_color,
+        "Outline": args.outline_width,
+        "Shadow": args.shadow,
+        "Alignment": args.alignment,
+        "MarginV": args.margin_v,
+    }
+    force_style = (
+        ",".join(
+            f"{key}={value}" for key, value in style_fields.items() if value is not None
+        )
+        or None
+    )
+    tool_args = subtitles.render_subtitles(
+        video, subtitle_file, output, args.mode, force_style=force_style
+    )
     sidecar = provenance.write_sidecar(
         output,
         "subtitles render",
         [video, subtitle_file],
-        {"mode": args.mode},
+        {"mode": args.mode, "force_style": force_style},
         [["ffmpeg", *tool_args]],
     )
     _register_if_workspace(args, output, "video-subtitled", "subtitles render")
     return (
-        {"output": str(output), "mode": args.mode},
+        {"output": str(output), "mode": args.mode, "force_style": force_style},
         [
             result.artifact(output, "video-subtitled"),
             result.artifact(sidecar, "provenance"),
@@ -471,8 +508,20 @@ def cmd_output_validate(
         loudness_tolerance=args.loudness_tolerance,
         expect_subtitles=args.expect_subtitles,
         subtitle_file=Path(args.subtitles) if args.subtitles else None,
+        expect_canvas=(
+            (
+                reframe.parse_canvas(args.expect_canvas)["width"],
+                reframe.parse_canvas(args.expect_canvas)["height"],
+            )
+            if args.expect_canvas
+            else None
+        ),
     )
     return report, []
+
+
+def cmd_doctor(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str, str]]]:
+    return diagnostics.inspect(args.workflow), []
 
 
 def cmd_sync_analyze(
@@ -572,6 +621,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=__version__)
     top = parser.add_subparsers(dest="group", required=True)
+
+    doctor = top.add_parser(
+        "doctor", help="check local dependencies for an editing workflow"
+    )
+    doctor.add_argument("--workflow", choices=diagnostics.WORKFLOWS, default="base")
+    doctor.set_defaults(handler=cmd_doctor, command_name="doctor")
 
     ws = top.add_parser("workspace", help="manage an editing workspace").add_subparsers(
         dest="action", required=True
@@ -836,8 +891,12 @@ def build_parser() -> argparse.ArgumentParser:
     c_inspect.add_argument(
         "--manifest", required=True, help="render manifest JSON path"
     )
-    c_inspect.add_argument(
-        "--cut", type=int, required=True, help="cut index from `cuts list`"
+    cut_selection = c_inspect.add_mutually_exclusive_group(required=True)
+    cut_selection.add_argument(
+        "--cut", type=int, help="zero-based cut index from `cuts list`"
+    )
+    cut_selection.add_argument(
+        "--all", action="store_true", help="inspect every cut in the manifest"
     )
     c_inspect.add_argument(
         "--output-dir", required=True, help="directory for the evidence bundle"
@@ -866,6 +925,15 @@ def build_parser() -> argparse.ArgumentParser:
     s_create.add_argument("--output-srt", required=True)
     s_create.add_argument("--output-vtt", required=True)
     s_create.add_argument(
+        "--max-words", type=int, help="maximum words per cue for short-form reflow"
+    )
+    s_create.add_argument(
+        "--max-chars", type=int, help="maximum characters per cue for short-form reflow"
+    )
+    s_create.add_argument(
+        "--max-duration", type=float, help="maximum approximate cue duration in seconds"
+    )
+    s_create.add_argument(
         "--workspace",
         help="optional workspace root; records the artifact in workspace.json",
     )
@@ -873,9 +941,39 @@ def build_parser() -> argparse.ArgumentParser:
 
     s_render = subs.add_parser("render", help="mux or burn subtitles into a video")
     s_render.add_argument("--input", required=True, help="video path")
-    s_render.add_argument("--subtitles", required=True, help="SRT or VTT path")
+    s_render.add_argument("--subtitles", required=True, help="SRT, VTT, or ASS path")
     s_render.add_argument("--output", required=True)
     s_render.add_argument("--mode", default="mux", choices=["mux", "burn"])
+    s_render.add_argument("--font", help="burn mode ASS font name")
+    s_render.add_argument(
+        "--font-size",
+        type=float,
+        help=(
+            "burn mode ASS font size in libass script units, not output pixels "
+            "(SRT/VTT commonly use a 288-unit-high script canvas)"
+        ),
+    )
+    s_render.add_argument(
+        "--primary-color", help="burn mode ASS color, e.g. &H00FFFFFF"
+    )
+    s_render.add_argument("--outline-color", help="burn mode ASS outline color")
+    s_render.add_argument(
+        "--outline-width", type=float, help="burn mode outline width in ASS units"
+    )
+    s_render.add_argument(
+        "--shadow", type=float, help="burn mode shadow depth in ASS units"
+    )
+    s_render.add_argument(
+        "--alignment", type=int, choices=range(1, 10), help="ASS alignment 1-9"
+    )
+    s_render.add_argument(
+        "--margin-v",
+        type=int,
+        help=(
+            "burn mode vertical margin in ASS script units, not output pixels "
+            "(for SRT/VTT, values around 35-50 suit lower-third captions)"
+        ),
+    )
     s_render.add_argument(
         "--workspace",
         help="optional workspace root; records the artifact in workspace.json",
@@ -896,7 +994,8 @@ def build_parser() -> argparse.ArgumentParser:
         dest="action", required=True
     )
     o_validate = out.add_parser(
-        "validate", help="check streams, canvas, duration, loudness, subtitles"
+        "validate",
+        help="technical checks only: streams, canvas, duration, loudness, subtitles",
     )
     o_validate.add_argument("--input", required=True, help="rendered output path")
     o_validate.add_argument("--profile", help="project profile YAML path")
@@ -905,6 +1004,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     o_validate.add_argument(
         "--expect-duration", type=float, help="expected duration seconds"
+    )
+    o_validate.add_argument(
+        "--expect-canvas", help="expected WIDTHxHEIGHT without requiring a profile"
     )
     o_validate.add_argument("--duration-tolerance", type=float, default=0.5)
     o_validate.add_argument("--loudness-tolerance", type=float, default=1.5)

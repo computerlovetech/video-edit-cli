@@ -21,12 +21,21 @@ Order of operations for a packaged episode:
    --transcript <transcript.json> --output-srt … --output-vtt …` maps transcript
    words through the kept ranges into output time (removed ranges drop their
    words). Transcripts must carry the plan's source id — pass `--source-id` at
-   `transcript create` time. Attach with `subtitles render` (`--mode mux`
-   default; `burn` requires an ffmpeg build with libass and fails cleanly
-   otherwise).
+   `transcript create` time. For short-form delivery, reflow with `--max-words`,
+   `--max-chars`, and `--max-duration`. Attach with `subtitles render` (`--mode
+   mux` default); burn mode accepts ASS styling options such as `--font`,
+   `--font-size`, `--outline-width`, `--alignment`, and `--margin-v`. Burn mode
+   requires libass; check it first with `doctor --workflow vertical-captioned`.
+   These numeric style values use libass/ASS script units, **not output pixels**.
+   Plain SRT/VTT commonly render on a 384x288 script canvas, so a practical
+   bold social-caption starting point is `--font-size 9.5 --outline-width 1
+   --shadow 0.5 --alignment 2 --margin-v 42`; inspect a burned frame before
+   rendering the full deliverable. Values such as `--font-size 60 --margin-v
+   280` are pixel-like assumptions and can push captions off-canvas.
 4. **Validate the deliverable.** `video-edit-cli output validate --input <file>
    --profile <profile.yaml> --profile-name <name> --expect-duration <s>
    [--expect-subtitles --subtitles <srt>]` checks streams, canvas, frame rate,
    duration, loudness/true peak, and subtitle timing. The command reports
-   `passed` with an issues list — the deliverable is not done until `passed`
-   is true or each issue is explicitly accepted by the user.
+   `passed` with an issues list and explicitly marks visual/editorial validation
+   as not performed. The deliverable is not done until technical validation and
+   the relevant human/agent visual review both pass.

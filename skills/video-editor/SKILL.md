@@ -25,23 +25,27 @@ command surface; inside this repository run it as `uv run video-edit-cli …`.
 1. **Establish the outcome.** Restate what deliverable is requested and what
    media exists. Done when you can name the requested outputs and every source
    file involved.
-2. **Set up a workspace.** Read [references/workspace.md](references/workspace.md),
+2. **Preflight the workflow.** Run `video-edit-cli doctor --workflow base`, or
+   use `transcription` / `vertical-captioned` when those capabilities apply.
+   Resolve failed dependency checks before expensive work.
+3. **Set up a workspace.** Read [references/workspace.md](references/workspace.md),
    then `video-edit-cli workspace init`. Done when `workspace.json` lists every
    source with its hash.
-3. **Inspect the media.** `probe` every source; gather audio, proxies, frames,
+4. **Inspect the media.** `probe` every source; gather audio, proxies, frames,
    filmstrips, waveforms, or range previews as decisions require. For dialogue
    media read [references/transcription.md](references/transcription.md) and
    transcribe first. Done when you know each source's duration, streams, and
    content well enough to justify the plan you are about to form.
-4. **Plan and render.** Read [references/edit-plan.md](references/edit-plan.md)
+5. **Plan and render.** Read [references/edit-plan.md](references/edit-plan.md)
    before creating or modifying a plan; author the plan yourself, validate it,
    and render a preview. Done when the validated plan renders and its manifest
    exists.
-5. **Review and revise.** Read [references/cut-review.md](references/cut-review.md);
+6. **Review and revise.** Read [references/cut-review.md](references/cut-review.md);
    inspect every boundary of any render you produced. Done when each cut passes
    or its defect is fixed or explicitly reported.
-6. **Finish the deliverable.** Done when every requested output exists, passes
-   its relevant validation, and your summary reports remaining defects honestly.
+7. **Finish the deliverable.** Done when every requested output passes technical
+   validation and the required visual/editorial review. `output validate` does
+   not inspect framing or editorial quality; report those reviews separately.
 
 ## Branch references (read when the condition applies)
 

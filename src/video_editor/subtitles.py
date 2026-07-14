@@ -9,6 +9,76 @@ from video_editor import ffmpeg
 from video_editor.errors import InvalidInputError, ToolFailureError
 
 
+def reflow_cues(
+    cues: list[dict[str, Any]],
+    max_words: int | None = None,
+    max_chars: int | None = None,
+    max_duration: float | None = None,
+) -> list[dict[str, Any]]:
+    """Split long cues deterministically for short-form readability.
+
+    Timing is apportioned by word count inside each authoritative mapped cue;
+    the outer cue boundaries remain unchanged.
+    """
+    for name, value in (
+        ("max_words", max_words),
+        ("max_chars", max_chars),
+        ("max_duration", max_duration),
+    ):
+        if value is not None and value <= 0:
+            raise InvalidInputError(f"{name} must be greater than zero")
+    if max_words is None and max_chars is None and max_duration is None:
+        return cues
+    output: list[dict[str, Any]] = []
+    for cue in cues:
+        words = cue["text"].split()
+        if not words:
+            continue
+        groups: list[list[str]] = []
+        current: list[str] = []
+        for word in words:
+            candidate = [*current, word]
+            over_words = max_words is not None and len(candidate) > max_words
+            over_chars = max_chars is not None and len(" ".join(candidate)) > max_chars
+            if current and (over_words or over_chars):
+                groups.append(current)
+                current = [word]
+            else:
+                current = candidate
+        if current:
+            groups.append(current)
+
+        if max_duration is not None:
+            duration = cue["end"] - cue["start"]
+            minimum_groups = max(1, int(duration / max_duration + 0.999999))
+            while len(groups) < minimum_groups:
+                index = max(range(len(groups)), key=lambda i: len(groups[i]))
+                group = groups[index]
+                if len(group) < 2:
+                    break
+                midpoint = (len(group) + 1) // 2
+                groups[index : index + 1] = [group[:midpoint], group[midpoint:]]
+
+        total_words = sum(len(group) for group in groups)
+        cursor = cue["start"]
+        span = cue["end"] - cue["start"]
+        for index, group in enumerate(groups):
+            end = (
+                cue["end"]
+                if index == len(groups) - 1
+                else cursor + span * len(group) / total_words
+            )
+            output.append(
+                {
+                    "start": round(cursor, 3),
+                    "end": round(end, 3),
+                    "text": " ".join(group),
+                }
+            )
+            cursor = end
+    return output
+
+
 def _fmt_srt(seconds: float) -> str:
     ms = round(seconds * 1000)
     h, rem = divmod(ms, 3_600_000)
@@ -87,7 +157,11 @@ def parse_srt_last_end(path: Path) -> float:
 
 
 def render_subtitles(
-    video: Path, subtitle_file: Path, output: Path, mode: str
+    video: Path,
+    subtitle_file: Path,
+    output: Path,
+    mode: str,
+    force_style: str | None = None,
 ) -> list[str]:
     """Attach subtitles to a video: mux a subtitle track, or burn if supported."""
     if not video.is_file():
@@ -96,6 +170,8 @@ def render_subtitles(
         raise InvalidInputError(f"subtitle file not found: {subtitle_file}")
     output.parent.mkdir(parents=True, exist_ok=True)
     if mode == "mux":
+        if force_style:
+            raise InvalidInputError("subtitle style options require --mode burn")
         codec = (
             "mov_text" if output.suffix.lower() in (".mp4", ".m4v", ".mov") else "srt"
         )
@@ -123,11 +199,15 @@ def render_subtitles(
                 "this ffmpeg build has no 'subtitles' filter (libass); "
                 "use --mode mux or install a full ffmpeg build"
             )
+        subtitle_filter = f"subtitles={subtitle_file}"
+        if force_style:
+            escaped_style = force_style.replace("'", r"\'")
+            subtitle_filter += f":force_style='{escaped_style}'"
         args = [
             "-i",
             str(video),
             "-vf",
-            f"subtitles={subtitle_file}",
+            subtitle_filter,
             "-c:a",
             "copy",
             str(output),

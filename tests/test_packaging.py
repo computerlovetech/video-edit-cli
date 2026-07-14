@@ -228,6 +228,41 @@ def test_subtitles_create_maps_through_cuts(
     assert vtt.read_text().startswith("WEBVTT")
 
 
+def test_subtitles_create_reflows_for_short_form(
+    pkg: dict[str, Any], tmp_path: Path
+) -> None:
+    srt = tmp_path / "short.srt"
+    code, envelope = run_cli(
+        [
+            "subtitles",
+            "create",
+            "--manifest",
+            str(pkg["manifest"]),
+            "--transcript",
+            str(pkg["transcript"]),
+            "--output-srt",
+            str(srt),
+            "--output-vtt",
+            str(tmp_path / "short.vtt"),
+            "--max-words",
+            "2",
+            "--max-chars",
+            "12",
+            "--max-duration",
+            "1.0",
+        ]
+    )
+    assert code == 0
+    assert envelope["data"]["cue_count"] > 2
+    cue_lines = [
+        line
+        for line in srt.read_text().splitlines()
+        if line and "-->" not in line and not line.isdigit()
+    ]
+    assert all(len(line.split()) <= 2 for line in cue_lines)
+    assert all(len(line) <= 12 for line in cue_lines)
+
+
 def test_subtitles_render_mux_and_validate(pkg: dict[str, Any], tmp_path: Path) -> None:
     srt = tmp_path / "subs.srt"
     run_cli(
@@ -278,6 +313,31 @@ def test_subtitles_render_mux_and_validate(pkg: dict[str, Any], tmp_path: Path) 
     assert envelope["data"]["passed"] is True, envelope["data"]["issues"]
 
 
+def test_subtitles_render_rejects_style_in_mux_mode(
+    pkg: dict[str, Any], tmp_path: Path
+) -> None:
+    srt = tmp_path / "subs.srt"
+    srt.write_text("1\n00:00:00,000 --> 00:00:01,000\nhello\n")
+    code, envelope = run_cli(
+        [
+            "subtitles",
+            "render",
+            "--input",
+            str(pkg["tmp"] / "preview.mp4"),
+            "--subtitles",
+            str(srt),
+            "--output",
+            str(tmp_path / "styled.mp4"),
+            "--mode",
+            "mux",
+            "--font",
+            "Arial",
+        ]
+    )
+    assert code != 0
+    assert "style options require --mode burn" in envelope["error"]["message"]
+
+
 def test_asset_inspect(tmp_path: Path, audio_only: Path) -> None:
     image = generate_image(tmp_path / "logo.png")
     code, envelope = run_cli(["asset", "inspect", "--input", str(image)])
@@ -316,3 +376,24 @@ def test_output_validate_flags_duration_mismatch(pkg: dict[str, Any]) -> None:
     data = envelope["data"]
     assert data["passed"] is False
     assert any("duration" in issue for issue in data["issues"])
+    assert data["validation_scope"] == {
+        "technical": "performed",
+        "visual_framing": "not_performed",
+        "editorial": "not_performed",
+    }
+
+
+def test_output_validate_expect_canvas(pkg: dict[str, Any]) -> None:
+    preview = str(pkg["tmp"] / "preview.mp4")
+    code, envelope = run_cli(
+        ["output", "validate", "--input", preview, "--expect-canvas", "640x360"]
+    )
+    assert code == 0
+    assert envelope["data"]["passed"] is True
+
+    code, envelope = run_cli(
+        ["output", "validate", "--input", preview, "--expect-canvas", "1080x1920"]
+    )
+    assert code == 0
+    assert envelope["data"]["passed"] is False
+    assert any("canvas" in issue for issue in envelope["data"]["issues"])

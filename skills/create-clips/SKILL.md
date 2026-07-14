@@ -34,9 +34,11 @@ Establish these before cutting anything; ask only for what you cannot infer.
    the first seconds, one clear idea, and a natural ending — a claim, a result, a
    story, a provocation. You choose; no command picks highlights for you. Target
    20–90 s for Shorts. Prefer moments that stand alone without episode context.
-3. **Tighten boundaries on evidence.** Use word-level transcript timing to start
-   on the first word of a sentence and end on a completed thought; verify each
-   boundary visually (frames/preview) before rendering.
+3. **Tighten boundaries and classify layouts.** Use word-level transcript timing
+   to start on the first word of a sentence and end on a completed thought.
+   Inspect a dense filmstrip over every complete candidate and frames around all
+   scene changes. Record solo, split-screen, screen-share, and transition spans;
+   mixed layouts require per-segment crops in the short plan.
 4. **Render both formats per clip.** Vertical via `short create-plan` (mind the
    vertical-video reference — check for burned-in captions before cropping faces);
    horizontal as a straight excerpt at source aspect. Master audio to the
@@ -53,6 +55,9 @@ Establish these before cutting anything; ask only for what you cannot infer.
 7. **Package and review.** Assemble the layout in
    [references/package-format.md](references/package-format.md), review every
    render's cut boundaries and framing, and report any residual defects honestly.
+   For each vertical render, inspect a dense full-range filmstrip (at least 15
+   samples per minute) plus both sides of every transform boundary. Technical
+   output validation never substitutes for this visual review.
 
 ## Boundaries
 

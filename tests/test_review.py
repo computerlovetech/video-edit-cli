@@ -42,6 +42,65 @@ def test_cuts_list(rendered: Path) -> None:
     assert first["output_time"] == pytest.approx(1.8)
     assert first["before"]["source_out"] == 2.3
     assert first["after"]["source_in"] == 3.0
+    assert first["boundary_type"] == "temporal-cut"
+    assert first["source_continuous"] is False
+
+
+def test_transform_boundary_skips_clipped_word_check(
+    main_video: Path, tmp_path: Path
+) -> None:
+    plan = {
+        "schema_version": "1",
+        "plan_id": "transform-plan",
+        "sources": [{"id": "src-1", "path": str(main_video)}],
+        "timeline": [
+            {
+                "source": "src-1",
+                "in": 0.5,
+                "out": 2.3,
+                "reason": "first crop",
+                "crop": {"x": 0, "y": 0, "width": 320, "height": 360},
+            },
+            {
+                "source": "src-1",
+                "in": 2.3,
+                "out": 4.0,
+                "reason": "second crop",
+                "crop": {"x": 320, "y": 0, "width": 320, "height": 360},
+            },
+        ],
+    }
+    plan_path = tmp_path / "transform.json"
+    plan_path.write_text(json.dumps(plan))
+    render_path = tmp_path / "transform.mp4"
+    code, _ = run_cli(
+        ["render", "preview", "--plan", str(plan_path), "--output", str(render_path)]
+    )
+    assert code == 0
+    manifest = render_path.with_name(render_path.name + ".manifest.json")
+    code, envelope = run_cli(["cuts", "list", "--manifest", str(manifest)])
+    assert code == 0
+    assert envelope["data"]["cuts"][0]["boundary_type"] == "transform"
+
+    transcript = make_transcript(tmp_path, main_video)
+    code, envelope = run_cli(
+        [
+            "cut",
+            "inspect",
+            "--manifest",
+            str(manifest),
+            "--all",
+            "--output-dir",
+            str(tmp_path / "reports"),
+            "--transcript",
+            str(transcript),
+        ]
+    )
+    assert code == 0
+    assert envelope["data"]["cut_count"] == 1
+    checks = envelope["data"]["reports"][0]["checks"]
+    assert checks["clipped_word_check"] == "skipped-continuous-source"
+    assert checks["clipped_word_before"] is None
 
 
 def test_cut_inspect_bundle(rendered: Path, tmp_path: Path) -> None:

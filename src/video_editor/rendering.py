@@ -35,6 +35,8 @@ def _clip_segments(plan: dict[str, Any]) -> list[dict[str, Any]]:
                 "in": clip["in"],
                 "out": clip["out"],
                 "reason": clip["reason"],
+                "crop": clip.get("crop"),
+                "gain_db": clip.get("gain_db"),
                 "output_start": round(cursor, 6),
                 "output_end": round(cursor + duration, 6),
             }
