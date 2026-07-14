@@ -1,3 +1,11 @@
+---
+title: Example prompts for AI video editing
+description: >-
+  Copy-paste prompts that make an AI agent edit video with video-edit-cli —
+  cut YouTube Shorts, edit podcast episodes, remove dead air, subtitle and
+  master audio.
+---
+
 # Example prompts
 
 A growing collection of prompts that work well. Have a good one? Add it.

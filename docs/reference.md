@@ -1,3 +1,11 @@
+---
+title: CLI reference
+description: >-
+  Every video-edit-cli command with flags and JSON output — probe, transcribe,
+  plan, render, subtitles, audio mastering, multicam sync, workspace, and
+  skills management.
+---
+
 # CLI reference
 
 Every command prints one JSON [result envelope](concepts.md#result-envelope) on

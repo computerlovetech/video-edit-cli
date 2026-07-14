@@ -1,6 +1,9 @@
 site_name: video-edit-cli
 site_url: https://computerlovetech.github.io/video-edit-cli/
-site_description: Headless, project-agnostic video-editing workbench for AI agents.
+site_description: >-
+  Video editing for AI agents — edit podcasts, make YouTube Shorts with
+  burned-in subtitles, sync multicam, master audio from your coding agent.
+  Open source, local, no watermarks. Works with Claude Code, Codex, Cursor & more.
 site_author: Kasper Junge
 repo_url: https://github.com/computerlovetech/video-edit-cli
 repo_name: computerlovetech/video-edit-cli
@@ -8,6 +11,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - scheme: default
       primary: black

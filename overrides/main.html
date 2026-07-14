@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {% set title = config.site_name %}
+  {% if page and page.meta and page.meta.title %}
+    {% set title = page.meta.title ~ " - " ~ config.site_name %}
+  {% elif page and page.title and not page.is_homepage %}
+    {% set title = page.title ~ " - " ~ config.site_name %}
+  {% endif %}
+  {% set description = config.site_description %}
+  {% if page and page.meta and page.meta.description %}
+    {% set description = page.meta.description %}
+  {% endif %}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ page.canonical_url }}">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description }}">
+  {% if page.is_homepage %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "video-edit-cli",
+    "description": "{{ config.site_description }}",
+    "url": "{{ config.site_url }}",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "macOS, Linux",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "softwareHelp": "{{ config.site_url }}",
+    "downloadUrl": "https://pypi.org/project/video-edit-cli/",
+    "codeRepository": "{{ config.repo_url }}"
+  }
+  </script>
+  {% endif %}
+{% endblock %}

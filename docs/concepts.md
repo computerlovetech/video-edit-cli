@@ -1,3 +1,11 @@
+---
+title: "Concepts: edit plans, provenance, workspaces"
+description: >-
+  The five ideas behind video-edit-cli — JSON result envelopes, immutable
+  sources with provenance sidecars, workspaces, reviewable edit plans, and
+  project profiles.
+---
+
 # Concepts
 
 Five ideas carry the whole tool: the result envelope, immutable sources with

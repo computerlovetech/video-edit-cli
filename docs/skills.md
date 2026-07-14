@@ -1,3 +1,11 @@
+---
+title: Agent skills for video editing
+description: >-
+  Install the bundled video-edit-cli agent skills that teach Claude Code,
+  Codex, Cursor, and other coding agents an evidence-based video editing
+  method.
+---
+
 # Agent skills
 
 The CLI owns the mechanics; the bundled **agent skills** teach an AI agent the
