@@ -1,12 +1,20 @@
 # video-edit-cli
 
+[![PyPI](https://img.shields.io/pypi/v/video-edit-cli)](https://pypi.org/project/video-edit-cli/)
+[![Python](https://img.shields.io/pypi/pyversions/video-edit-cli)](https://pypi.org/project/video-edit-cli/)
+[![Tests](https://github.com/computerlovetech/video-edit-cli/actions/workflows/test.yml/badge.svg)](https://github.com/computerlovetech/video-edit-cli/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A video-editing tool for AI agents. Your agent gets a headless editing
 workbench — inspect, transcribe, cut, master, and package video — plus a
-bundled skill that teaches it how to edit well. It works with any coding
-agent that supports skills: Claude Code, Codex, Pi, Cursor, Copilot, Amp,
-and others.
+bundled skill that teaches it how to edit well.
 
-## Get started
+Works with any coding agent that supports skills:
+**Claude Code** · **Codex** · **Cursor** · **Copilot** · **Amp** · **Pi** · and others.
+
+![video-edit-cli demo](docs/assets/demo.gif)
+
+## Get started in 60 seconds
 
 Install the `video-edit-cli` skill into your project with
 [skills.sh](https://skills.sh) (it installs into every agent you use):
@@ -15,17 +23,17 @@ Install the `video-edit-cli` skill into your project with
 npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
-Then ask your agent to edit a recording. The skill guides the agent through the
-whole workflow — including installing the `video-edit-cli` CLI itself
-(`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg`/`ffprobe`
-must be present separately.
-
-## Example prompts
-
-A growing collection of prompts that work well. Have a good one? Add it.
+Then ask your agent to edit a recording:
 
 > Make clips for YouTube Shorts from this video, with burned-in subtitles:
 > https://youtu.be/r1Kh5WssSPg
+
+That's it. The skill guides the agent through the whole workflow — including
+installing the `video-edit-cli` CLI itself (`uv tool install video-edit-cli`)
+if it isn't on `PATH`. Only `ffmpeg`/`ffprobe` must be present separately.
+
+More prompts that work well: [example prompts](docs/examples.md). Have a good
+one? Add it.
 
 ## How it works
 

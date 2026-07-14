@@ -3,6 +3,8 @@ name = "video-edit-cli"
 version = "0.1.1"
 description = "Headless, project-agnostic video-editing CLI with atomic subcommands for AI agents."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 keywords = ["video", "editing", "ffmpeg", "agents", "cli"]
 classifiers = [
