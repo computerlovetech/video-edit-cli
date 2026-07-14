@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-14
+
+### Added
+
+- `doctor` command: checks local dependencies for an editing workflow.
+- `audio replace` command: swap a video's audio stream while copying the video
+  stream, with codec/bitrate options and a duration-mismatch guard.
+- Subtitle improvements: short-form cue reflow options (`--max-words`,
+  `--max-chars`, `--max-duration`) and burn-in styling controls (font, colors,
+  outline, shadow, alignment).
+- Cut review improvements: inspect a single cut by index or all cuts, plus
+  technical-only checks (streams, canvas, duration, loudness, subtitles).
+
+### Changed
+
+- Improved audio restoration primitives: denoising, mastering, analysis, and
+  diagnostics.
+- Renamed the bundled agent skill from `video-editor` to `video-edit-cli` to
+  match the package and the skills.sh install command.
+
+### Docs
+
+- New MkDocs documentation site deployed to GitHub Pages.
+- Open-source prep: MIT license, README refresh with badges and example prompts.
+
 ## [0.1.1] - 2026-07-12
 
 ### Added
