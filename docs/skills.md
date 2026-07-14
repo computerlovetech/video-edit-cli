@@ -7,13 +7,22 @@ that ship inside the wheel.
 
 ## Installing
 
+The recommended path is [skills.sh](https://skills.sh) — no prior CLI install
+needed; the skill has the agent install the CLI when it's missing:
+
+```sh
+npx skills add computerlovetech/video-edit-cli --skill video-editor
+```
+
+If the CLI is already installed, the bundled copy can be installed directly:
+
 ```sh
 video-edit-cli skills list                 # what ships in this build
 video-edit-cli skills install              # copies into .claude/skills/
 video-edit-cli skills install --target <dir>
 ```
 
-Alternatively, manage them with [agr](https://agr.run):
+They can also be managed with [agr](https://agr.run):
 
 ```sh
 agr add computerlovetech/video-edit-cli/video-editor

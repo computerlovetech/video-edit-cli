@@ -1,11 +1,31 @@
 # video-edit-cli
 
-Headless, project-agnostic video-editing workbench for AI agents. One
-`video-edit-cli` binary exposes atomic, non-interactive subcommands that inspect
-and transform media deterministically. The agent (or you) plans the edit; the
-CLI supplies the mechanics.
+A video-editing tool for AI agents. Your agent gets a headless editing
+workbench — inspect, transcribe, cut, master, and package video — plus a
+bundled [skill](skills.md) that teaches it how to edit well.
+
+## Get started
+
+Install the `video-editor` skill into your project with
+[skills.sh](https://skills.sh):
+
+```sh
+npx skills add computerlovetech/video-edit-cli --skill video-editor
+```
+
+Then ask your agent to edit a recording. The skill guides the agent through the
+whole workflow — including installing the `video-edit-cli` CLI itself
+(`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg` and
+`ffprobe` must be installed separately.
+
+The rest of this page covers the CLI directly: its contract, manual
+installation, and a quickstart for driving it yourself.
 
 ## The contract
+
+One `video-edit-cli` binary exposes atomic, non-interactive, project-agnostic
+subcommands that inspect and transform media deterministically. The agent (or
+you) plans the edit; the CLI supplies the mechanics.
 
 Every command follows the same rules:
 

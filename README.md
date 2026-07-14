@@ -1,8 +1,28 @@
 # video-edit-cli
 
-Headless, project-agnostic video-editing workbench for AI agents. One `video-edit-cli`
-CLI exposes atomic, non-interactive subcommands that inspect and transform media
-deterministically; the agent plans the edit and composes the primitives.
+A video-editing tool for AI agents. Your agent gets a headless editing
+workbench — inspect, transcribe, cut, master, and package video — plus a
+bundled skill that teaches it how to edit well.
+
+## Get started
+
+Install the `video-editor` skill into your project with
+[skills.sh](https://skills.sh):
+
+```sh
+npx skills add computerlovetech/video-edit-cli --skill video-editor
+```
+
+Then ask your agent to edit a recording. The skill guides the agent through the
+whole workflow — including installing the `video-edit-cli` CLI itself
+(`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg`/`ffprobe`
+must be present separately.
+
+## How it works
+
+The CLI exposes atomic, non-interactive, project-agnostic subcommands that
+inspect and transform media deterministically; the agent plans the edit and
+composes the primitives.
 
 Contract:
 
@@ -14,9 +34,9 @@ Contract:
 - Requires `ffmpeg` and `ffprobe` on PATH; commands fail with the stable error code
   `missing-binary` when absent.
 
-Install the base CLI with `uv tool install video-edit-cli`. For local Apple Silicon
-transcription, install `uv tool install 'video-edit-cli[mlx]'`. FFmpeg and FFprobe must
-be installed separately and available on `PATH`.
+The CLI can also be installed directly: `uv tool install video-edit-cli`. For local
+Apple Silicon transcription, install `uv tool install 'video-edit-cli[mlx]'`. FFmpeg
+and FFprobe must be installed separately and available on `PATH`.
 
 DeepFilterNet restoration uses the optional `df` extra on Python 3.11–3.12. Run
 `video-edit-cli doctor --workflow audio-restoration` before denoising to verify the
@@ -35,15 +55,10 @@ uv run video-edit-cli filmstrip create --input recording.mp4 \
 ```
 
 The companion skill in `skills/video-editor/` teaches agents the editing method;
-this package owns the mechanics. The skill ships inside the package — install it
-into a project with:
-
-```sh
-video-edit-cli skills install            # copies into .claude/skills/
-video-edit-cli skills install --target <dir>
-```
-
-Alternatively, manage it with agr: `agr add computerlovetech/video-edit-cli/video-editor`.
+this package owns the mechanics. Besides skills.sh (see Get started), the skill
+also ships inside the package — `video-edit-cli skills install` copies it into
+`.claude/skills/` (or `--target <dir>`) — and can be managed with agr:
+`agr add computerlovetech/video-edit-cli/video-editor`.
 Skills in `skills/` that are not listed in `video_editor.skills.SHIPPED_SKILLS`
 (and the matching force-include entries in `pyproject.toml`) are agr-only and do
 not ship in the wheel. Tests generate small deterministic fixtures at

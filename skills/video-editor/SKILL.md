@@ -9,6 +9,10 @@ editorial plan yourself — no command decides what to keep, remove, or highligh
 
 Run `video-edit-cli --help` (and `--help` on any subcommand) for the authoritative
 command surface; inside this repository run it as `uv run video-edit-cli …`.
+If `video-edit-cli` is not on `PATH`, install it first with
+`uv tool install video-edit-cli` (Apple Silicon transcription:
+`uv tool install 'video-edit-cli[mlx]'`); `ffmpeg` and `ffprobe` must already be
+installed separately.
 
 ## Invariants (hold for every task)
 
