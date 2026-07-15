@@ -5,7 +5,7 @@
 [![Tests](https://github.com/computerlovetech/video-edit-cli/actions/workflows/test.yml/badge.svg)](https://github.com/computerlovetech/video-edit-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Turn raw recordings into published videos with your AI agent. Edit a podcast
+Turn raw recordings into publish-ready videos with your AI agent. Edit a podcast
 into an episode, cut YouTube Shorts with burned-in subtitles, remove silences
 and false starts, sync multi-camera shoots, restore and master audio — by
 asking your coding agent in plain language. Open source, runs locally, no

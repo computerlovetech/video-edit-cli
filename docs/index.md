@@ -8,7 +8,7 @@ description: >-
 
 # video-edit-cli
 
-Turn raw recordings into published videos with your AI agent. video-edit-cli
+Turn raw recordings into publish-ready videos with your AI agent. video-edit-cli
 gives your agent a headless editing workbench — inspect, transcribe, cut,
 master, and package video — plus a bundled [skill](skills.md) that teaches it
 how to edit well: edit a podcast into an episode, cut YouTube Shorts with
