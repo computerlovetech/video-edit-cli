@@ -51,11 +51,6 @@ It walks the agent through the workflow described in
 cut review, and final validation — with branch references for audio
 restoration, packaged deliverables, multi-camera work, and vertical video.
 
-**create-clips** builds on video-edit-cli: it derives several publishable social
-clips (YouTube Shorts, standard YouTube videos, LinkedIn) from a long-form
-recording after a main edit exists. It is distributed via agr rather than in
-the wheel.
-
 ## For repository contributors
 
 The skill sources live in `skills/` at the repository root. Only skills listed
