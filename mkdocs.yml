@@ -63,6 +63,22 @@ validation:
 plugins:
   - search:
       separator: '[\s\-\._]+'
+  - llmstxt:
+      markdown_description: >-
+        video-edit-cli is an open-source CLI that lets AI coding agents
+        (Claude Code, Codex, Cursor, and others) edit video: cut podcasts into
+        episodes, make YouTube Shorts with burned-in subtitles, sync multicam,
+        and master audio — locally, with auditable edit plans and provenance.
+      full_output: llms-full.txt
+      sections:
+        Documentation:
+          - index.md
+          - examples.md
+          - concepts.md
+          - workflows.md
+          - reference.md
+          - skills.md
+          - faq.md
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -85,3 +101,4 @@ nav:
   - Workflows: workflows.md
   - CLI reference: reference.md
   - Agent skills: skills.md
+  - FAQ: faq.md

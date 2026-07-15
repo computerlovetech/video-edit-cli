@@ -11,6 +11,8 @@ and false starts, sync multi-camera shoots, restore and master audio — by
 asking your coding agent in plain language. Open source, runs locally, no
 watermarks, no per-clip credits.
 
+![An AI coding agent turning a talk into three captioned YouTube Shorts with video-edit-cli](https://raw.githubusercontent.com/computerlovetech/video-edit-cli/main/docs/assets/demo.svg)
+
 This is the tool we use internally at [computerlove.tech](https://computerlove.tech)
 to edit our video podcast content — we open-sourced it so your agent can edit
 yours too.
@@ -89,10 +91,22 @@ Runs on macOS and Linux. Windows is untested; use WSL.
 
 ## How it compares
 
-**vs. Opus Clip, Vizard, Klap, Descript** — those are hosted apps with
-subscriptions, per-clip credits, and watermarked free tiers. video-edit-cli is
-free and runs locally: your footage never leaves your machine, and the agent
-explains every cut instead of a black-box "virality score".
+|  | video-edit-cli | Opus Clip / Klap / Vizard | Descript | auto-editor |
+|---|---|---|---|---|
+| Price | Free, open source | $15–29/mo + per-clip credits | $16–24/mo | Free |
+| Watermarks | Never | On free tiers | On free tier | Never |
+| Runs locally / footage stays private | ✅ | ❌ uploaded to their cloud | ❌ | ✅ |
+| Explains every cut with a written reason | ✅ | ❌ black-box "virality score" | ❌ | ❌ |
+| Transcript-driven editing | ✅ | ✅ | ✅ | ❌ threshold only |
+| Shorts with reframing + burned-in captions | ✅ | ✅ | ✅ | ❌ |
+| Audio mastering, multicam sync, QC | ✅ | ❌ | Partial | ❌ |
+| Drives your existing AI coding agent | ✅ | ❌ | ❌ | ❌ |
+| Auditable & reproducible (provenance sidecars) | ✅ | ❌ | ❌ | ❌ |
+
+**vs. hosted clip apps (Opus Clip, Vizard, Klap, Descript)** — those are
+subscription apps with per-clip credits and watermarked free tiers.
+video-edit-cli is free and runs locally: your footage never leaves your
+machine, and the agent explains every cut instead of a black-box score.
 
 **vs. auto-editor / jumpcutter** — those remove silence with a threshold.
 video-edit-cli covers the whole editorial job: transcript-driven cuts, shorts

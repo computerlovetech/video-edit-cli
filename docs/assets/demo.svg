@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15">
+  <style>
+    .bg { fill: #0d1117; }
+    .chrome { fill: #161b22; }
+    .t { fill: #e6edf3; }
+    .dim { fill: #8b949e; }
+    .green { fill: #3fb950; }
+    .orange { fill: #ff7b45; }
+    .blue { fill: #79c0ff; }
+    .line {
+      opacity: 0;
+      animation-name: show;
+      animation-duration: 0.4s;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+    @keyframes show { to { opacity: 1; } }
+    .l1  { animation-delay: 0.0s; }
+    .l2  { animation-delay: 2.2s; }
+    .l3  { animation-delay: 3.4s; }
+    .l4  { animation-delay: 4.6s; }
+    .l5  { animation-delay: 5.8s; }
+    .l6  { animation-delay: 6.6s; }
+    .l7  { animation-delay: 7.4s; }
+    .l8  { animation-delay: 8.6s; }
+    .l9  { animation-delay: 9.8s; }
+    .l10 { animation-delay: 10.6s; }
+    .l11 { animation-delay: 11.4s; }
+    .l12 { animation-delay: 12.8s; }
+    .typing { clip-path: inset(0 100% 0 0); animation: type 2s steps(58, end) forwards; }
+    @keyframes type { to { clip-path: inset(0 -2% 0 0); } }
+    .caret { animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+
+  <rect class="bg" width="800" height="460" rx="10"/>
+  <rect class="chrome" width="800" height="36" rx="10"/>
+  <rect class="chrome" y="18" width="800" height="18"/>
+  <circle cx="22" cy="18" r="6" fill="#ff5f57"/>
+  <circle cx="42" cy="18" r="6" fill="#febc2e"/>
+  <circle cx="62" cy="18" r="6" fill="#28c840"/>
+  <text x="400" y="23" text-anchor="middle" class="dim" font-size="13">your coding agent</text>
+
+  <g class="line l1">
+    <text x="24" y="74" class="typing"><tspan class="orange">❯ </tspan><tspan class="t">Make three YouTube Shorts from talk.mp4, with subtitles</tspan></text>
+  </g>
+
+  <text x="24" y="112" class="line l2"><tspan class="green">⏺</tspan><tspan class="t" dx="8">Transcribing… 1,847 words, word-level timestamps</tspan></text>
+  <text x="24" y="140" class="line l3"><tspan class="green">⏺</tspan><tspan class="t" dx="8">Reading the transcript for the strongest moments…</tspan></text>
+  <text x="24" y="168" class="line l4"><tspan class="green">⏺</tspan><tspan class="t" dx="8">Authoring edit plan — every cut carries a written reason:</tspan></text>
+  <text x="44" y="194" class="line l5 dim">"12:04 → 12:58 · the story about the launch that failed"</text>
+  <text x="44" y="218" class="line l6 dim">"31:40 → 32:29 · the pricing mistake and what it cost"</text>
+  <text x="44" y="242" class="line l7 dim">"47:02 → 47:58 · the hiring rule they still use today"</text>
+  <text x="24" y="274" class="line l8"><tspan class="green">⏺</tspan><tspan class="t" dx="8">Validating plan, reframing to 9:16, burning subtitles…</tspan></text>
+
+  <text x="24" y="316" class="line l9"><tspan class="green">✔</tspan><tspan class="blue" dx="8">shorts/failed-launch.mp4</tspan><tspan class="dim" dx="8">54s · captioned · provenance recorded</tspan></text>
+  <text x="24" y="342" class="line l10"><tspan class="green">✔</tspan><tspan class="blue" dx="8">shorts/pricing-mistake.mp4</tspan><tspan class="dim" dx="8">48s · captioned · provenance recorded</tspan></text>
+  <text x="24" y="368" class="line l11"><tspan class="green">✔</tspan><tspan class="blue" dx="8">shorts/hiring-rule.mp4</tspan><tspan class="dim" dx="8">59s · captioned · provenance recorded</tspan></text>
+
+  <g class="line l12">
+    <text x="24" y="412" class="t">Rendered locally. No uploads, no watermarks, no per-clip credits.</text>
+    <rect class="caret" x="24" y="424" width="9" height="17" fill="#ff7b45"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]: $ video-edit-cli
+    - heading "Video editing for AI agents" [level=1] [ref=e5]:
+      - text: Video editing
+      - text: for AI agents
+    - generic [ref=e6]: Podcasts, YouTube Shorts, subtitles, multicam, mastering — edited by your coding agent, locally.
+    - generic [ref=e7]:
+      - generic [ref=e8]: Open source
+      - generic [ref=e9]: No watermarks
+      - generic [ref=e10]: No credits
+  - generic [ref=e11]:
+    - generic [ref=e16]: ❯ Make three Shorts from talk.mp4
+    - generic [ref=e17]: ⏺ Transcribing… 1,847 words
+    - generic [ref=e18]: ⏺ Authoring edit plan…
+    - generic [ref=e19]: ✔ shorts/failed-launch.mp4 54s
+    - generic [ref=e20]: ✔ shorts/pricing-mistake.mp4 48s
+    - generic [ref=e21]: ✔ shorts/hiring-rule.mp4 59s
