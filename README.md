@@ -11,6 +11,10 @@ and false starts, sync multi-camera shoots, restore and master audio — by
 asking your coding agent in plain language. Open source, runs locally, no
 watermarks, no per-clip credits.
 
+This is the tool we use internally at [computerlove.tech](https://computerlove.tech)
+to edit our video podcast content — we open-sourced it so your agent can edit
+yours too.
+
 Works with any coding agent that supports skills:
 **Claude Code** · **Codex** · **Cursor** · **GitHub Copilot** · **Pi** · and others.
 
