@@ -10,8 +10,8 @@ description: >-
 
 Every command prints one JSON [result envelope](concepts.md#result-envelope) on
 stdout and exits non-zero with a stable error code on failure.
-`video-edit-cli --help` (and `--help` on every subcommand) is the authoritative
-surface; this page mirrors it with context.
+`video-edit-cli --help` and each subcommand's `--help` output define the current
+interface. This page adds context.
 
 ## Installation
 
@@ -31,8 +31,8 @@ uv tool install 'video-edit-cli[mlx]'
 uv tool install 'video-edit-cli[df]'
 ```
 
-`ffmpeg` and `ffprobe` must be installed separately and available on `PATH`;
-commands fail with the stable error code `missing-binary` when they are absent.
+Install `ffmpeg` and `ffprobe` separately and add them to `PATH`. Commands fail
+with the stable error code `missing-binary` when they are absent.
 Verify your environment with [`doctor`](#doctor) before starting work.
 
 ## Quickstart
@@ -91,7 +91,7 @@ video-edit-cli doctor [--workflow {base,transcription,vertical-captioned,audio-r
 |---|---|
 | `--workflow` | Which dependency chain to verify (default `base`: ffmpeg + ffprobe). `transcription` adds the local Whisper backend; `audio-restoration` verifies the full Torch/Torchaudio/DeepFilterNet import chain; `vertical-captioned` covers the short-form pipeline. |
 
-Run the matching workflow check before expensive work; resolve failures first.
+Run the matching workflow check before costly work. Fix failures first.
 
 ---
 
@@ -132,7 +132,7 @@ video-edit-cli probe --input INPUT
 
 ### `proxy create`
 
-Create a low-resolution proxy for cheap seeking and review.
+Create a low-resolution proxy for fast seeking and review.
 
 ```sh
 video-edit-cli proxy create --input INPUT --output OUTPUT [--height HEIGHT] [--workspace WS]
@@ -181,7 +181,7 @@ video-edit-cli waveform create --input INPUT --output OUTPUT --start START --end
 
 ### `preview create`
 
-Render a short low-cost preview of a range.
+Render a short, low-resolution preview of a range.
 
 ```sh
 video-edit-cli preview create --input INPUT --output OUTPUT --start START --end END [--workspace WS]
@@ -227,8 +227,8 @@ video-edit-cli audio master --input INPUT --output OUTPUT \
 
 ### `audio denoise`
 
-Run one explicitly selected local denoising backend. Denoising is never applied
-implicitly.
+Run one selected local denoising backend. The command never applies denoising
+unless you request it.
 
 ```sh
 video-edit-cli audio denoise --input INPUT --output OUTPUT --backend deepfilternet [--workspace WS]
@@ -242,7 +242,7 @@ Run `doctor --workflow audio-restoration` first.
 
 ### `audio compare`
 
-Produce loudness-matched A/B artifacts and metrics for candidate audio files.
+Create loudness-matched A/B files and metrics for candidate audio files.
 
 ```sh
 video-edit-cli audio compare --input A.wav --input B.wav --output-dir DIR \
@@ -328,8 +328,8 @@ video-edit-cli plan validate --plan PLAN
 
 ### `render preview`
 
-Render a plan with the low-cost preview profile (360p default). Also writes
-`<output>.manifest.json` mapping output boundaries to source times.
+Render a plan with the 360p preview profile by default. The command also writes
+`<output>.manifest.json`, which maps output boundaries to source times.
 
 ```sh
 video-edit-cli render preview --plan PLAN --output OUTPUT [--height HEIGHT] [--workspace WS]
@@ -351,7 +351,7 @@ video-edit-cli render master --plan PLAN --profile PROFILE.yaml \
 
 ### `cuts list`
 
-Enumerate cut boundaries from a render manifest.
+List cut boundaries from a render manifest.
 
 ```sh
 video-edit-cli cuts list --manifest MANIFEST
@@ -380,7 +380,7 @@ video-edit-cli cut inspect --manifest MANIFEST (--cut INDEX | --all) \
 
 ### `subtitles create`
 
-Derive SRT + WebVTT from source transcripts mapped through a render manifest.
+Use a render manifest to derive SRT + WebVTT from source transcripts.
 
 ```sh
 video-edit-cli subtitles create --manifest MANIFEST --transcript TRANSCRIPT \
@@ -428,8 +428,8 @@ video-edit-cli asset inspect --input INPUT
 
 ### `output validate`
 
-Technical checks only — streams, canvas, duration, loudness, subtitles. Framing
-and editorial quality need human/agent review.
+Check streams, canvas, duration, loudness, and subtitles. A person or agent
+must review framing and editorial quality.
 
 ```sh
 video-edit-cli output validate --input INPUT \
@@ -451,8 +451,7 @@ video-edit-cli output validate --input INPUT \
 
 ### `sync analyze`
 
-Estimate the audio offset between two sources. Produces evidence only — it
-changes nothing.
+Estimate the audio offset between two sources. This command changes nothing.
 
 ```sh
 video-edit-cli sync analyze --reference REFERENCE --other OTHER [--max-offset SECONDS]

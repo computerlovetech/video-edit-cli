@@ -8,7 +8,7 @@ description: >-
 
 # Concepts
 
-Five ideas carry the whole tool: the result envelope, immutable sources with
+The tool uses five ideas: the result envelope, immutable sources with
 provenance, workspaces, edit plans, and project profiles.
 
 ## Result envelope
@@ -45,7 +45,7 @@ codes and exit codes are stable:
 | `missing-binary` | 3 | `ffmpeg`/`ffprobe` (or an optional backend) not on `PATH` |
 | `tool-failure` | 4 | An underlying tool ran and failed |
 
-The envelope is described formally in
+See the formal definition in
 [`result.schema.json`](https://github.com/computerlovetech/video-edit-cli/blob/main/src/video_editor/schemas/result.schema.json);
 the other JSON documents (edit plans, transcripts, workspaces, profiles) have
 schemas in the same directory.
@@ -58,15 +58,13 @@ derived file gets a `*.provenance.json` sidecar recording:
 - the input paths and their SHA-256 hashes,
 - the tool versions (`video-edit-cli`, ffmpeg),
 - the parameters the command received,
-- the exact underlying tool commands that were executed.
+- the exact commands the underlying tools ran.
 
-This makes any artifact auditable and reproducible: given the sidecar, you can
-see exactly where a file came from and re-derive it.
+The sidecar shows where a file came from and how to create it again.
 
 ## Workspaces
 
-A workspace is an organized directory for one editing job, created with
-`workspace init`:
+`workspace init` creates an organized directory for one editing job:
 
 ```text
 <workspace>/
@@ -80,17 +78,16 @@ A workspace is an organized directory for one editing job, created with
   reports/          validation, comparison, and QC reports
 ```
 
-Workspaces are organization, not hidden state. Commands still take explicit
-input and output paths; passing `--workspace <root>` additionally records the
-derived artifact in `workspace.json`. Sources are referred to by manifest id
-(`src-1`, `src-2`, …) in plans and notes, and can carry a `--role` label
+Workspaces organize files; they do not hold hidden state. Commands still take
+explicit input and output paths. Passing `--workspace <root>` also records the
+derived artifact in `workspace.json`. Plans and notes refer to sources by
+manifest id (`src-1`, `src-2`, …). Sources can also have a `--role` label
 (`camera-a`, `screen`, `mic-guest`).
 
-The companion agent skill defaults new jobs to
+By default, the companion agent skill puts new jobs in
 `<project-root>/video-edit-projects/YYYY-MM-DD-<source-id-or-slug>/`, with the CLI
-workspace in its `edit/` directory. This is a visible agent convention; the CLI
-itself continues to require explicit paths and honors any location chosen by the
-user.
+workspace in its `edit/` directory. This is an agent convention. The CLI still
+requires explicit paths and accepts any location the user chooses.
 
 ## Edit plans
 
@@ -115,26 +112,25 @@ Rules enforced by `plan validate`:
 
 - The plan must match
   [`edit-plan.schema.json`](https://github.com/computerlovetech/video-edit-cli/blob/main/src/video_editor/schemas/edit-plan.schema.json);
-  unknown fields are rejected.
-- Clip ranges are checked against the real media durations.
+  the validator rejects unknown fields.
+- The validator checks clip ranges against the real media durations.
 - Clips on the same source must be in increasing source order and must not
   overlap.
-- Every clip carries a `reason` — the editorial justification a reviewer can
-  audit.
+- Every clip has a `reason` that explains the edit to a reviewer.
 
 Rendering a plan (`render preview` or `render master`) also writes
 `<output>.manifest.json`, which maps every output-time cut boundary back to
 source times. That manifest drives the review commands (`cuts list`,
 `cut inspect`) and subtitle derivation (`subtitles create`).
 
-Revisions are new files: set `parent_plan` to the previous plan's id rather
-than editing a rendered plan in place.
+Create a new file for each revision. Set `parent_plan` to the previous plan's
+id instead of editing a rendered plan in place.
 
 ## Project profiles
 
-Project identity — canvases, codecs, loudness targets, intro/outro assets,
-music, fonts, camera aliases, subtitle styling — lives in an external YAML
-profile, passed explicitly by path. Profiles are never discovered from the
+An external YAML profile defines the project's canvases, codecs, loudness
+targets, intro and outro assets, music, fonts, camera aliases, and subtitle
+style. Pass its path explicitly. The CLI never finds profiles through the
 environment.
 
 Top-level keys: `schema_version`, `profiles` (named render profiles), `music`,
@@ -143,9 +139,8 @@ resolve against the profile file's directory, and every referenced file must
 exist. The schema is
 [`project-profile.schema.json`](https://github.com/computerlovetech/video-edit-cli/blob/main/src/video_editor/schemas/project-profile.schema.json).
 
-Profiles are consumed by `render master` (pick a named profile to render with)
-and `output validate` (check a finished file against the profile's canvas,
-codec, and loudness expectations).
+`render master` uses a named profile. `output validate` checks a finished file
+against the profile's canvas, codec, and loudness settings.
 
 ## Transcripts
 

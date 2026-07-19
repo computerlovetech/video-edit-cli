@@ -8,9 +8,9 @@ description: >-
 
 # Workflows
 
-Recipes composing the primitives into common deliverables. All of them follow
-the same shape: preflight with `doctor`, set up a workspace, gather evidence,
-act, then validate. Paths below assume a workspace at `$WS`.
+These recipes combine commands into common deliverables. Each recipe runs
+`doctor`, sets up a workspace, gathers evidence, acts, and validates. The paths
+below assume a workspace at `$WS`.
 
 ## Main edit (dialogue-driven rough cut)
 
@@ -35,7 +35,7 @@ video-edit-cli render preview --plan $WS/plans/rough-cut-1.json \
   --output $WS/previews/rough-cut-1.mp4 --workspace $WS
 ```
 
-Then review every boundary before showing the result to anyone:
+Review every boundary before sharing the result:
 
 ```sh
 video-edit-cli cuts list --manifest $WS/previews/rough-cut-1.mp4.manifest.json
@@ -73,12 +73,12 @@ video-edit-cli output validate --input $WS/renders/episode.subbed.mp4 \
   --profile ./project.yaml --profile-name youtube-1080p --expect-subtitles
 ```
 
-`output validate` performs technical checks only (streams, canvas, duration,
-loudness, subtitles); framing and editorial quality still need eyes — extract
-frames or previews and review them.
+`output validate` checks streams, canvas, duration, loudness, and subtitles. It
+does not check framing or editorial quality. Extract and review frames or
+previews for those checks.
 
-External assets (intro, outro, music, fonts, images, subtitle files) can be
-sanity-checked before use with `asset inspect --input <path>`.
+Check external assets (intro, outro, music, fonts, images, subtitle files)
+before use with `asset inspect --input <path>`.
 
 ## Vertical short from a long-form source
 
@@ -112,9 +112,9 @@ tight cues (`--max-words` / `--max-chars`) and burn them with
 
 ## Audio restoration and mastering
 
-To denoise and loudness-normalize a recording's audio from the command line,
-extract it, analyze it, denoise with an explicit backend, compare candidates,
-then master and re-attach the winner:
+To denoise and loudness-normalize audio, extract and analyze it. Then denoise
+it with an explicit backend, compare candidates, master the best one, and
+attach it to the video:
 
 ```sh
 video-edit-cli doctor --workflow audio-restoration   # verifies the DF/Torch chain
@@ -131,7 +131,7 @@ video-edit-cli audio denoise --input $WS/analysis/recording.wav \
 video-edit-cli audio compare --input $WS/analysis/recording.wav \
   --input $WS/analysis/recording.dn.wav --output-dir $WS/reports/ab
 
-# Master the winner, then put it back under the video
+# Master the best candidate, then attach it to the video
 video-edit-cli audio master --input $WS/analysis/recording.dn.wav \
   --output $WS/analysis/recording.mastered.wav --workspace $WS
 video-edit-cli audio replace --video recording.mp4 \
@@ -173,6 +173,6 @@ media. Aligned sources can then appear side by side in one plan's `sources`.
 | Audio shape of a range | `waveform create` |
 | Watchable low-cost preview of a range | `preview create` |
 
-Prefer the cheapest evidence that answers the current question: `probe` and
-transcripts first for dialogue, targeted frames/waveforms/previews only where a
-decision needs them.
+Use the least costly evidence that answers the question. For dialogue, start
+with `probe` and transcripts. Use targeted frames, waveforms, and previews only
+when needed.

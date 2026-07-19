@@ -8,10 +8,9 @@ description: >-
 
 # Agent skills
 
-The CLI owns the mechanics; the bundled **agent skills** teach an AI agent the
-editing method — when to gather evidence, how to author plans, how to review
-cuts. They are Markdown skill definitions (`SKILL.md` plus reference documents)
-that ship inside the wheel.
+The CLI performs the operations. The bundled **agent skills** teach an AI agent
+when to gather evidence, how to write plans, and how to review cuts. These
+Markdown files (`SKILL.md` and its references) ship inside the wheel.
 
 ## Installing
 
@@ -22,7 +21,7 @@ needed; the skill has the agent install the CLI when it's missing:
 npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
-If the CLI is already installed, the bundled copy can be installed directly:
+If you already installed the CLI, install its bundled copy directly:
 
 ```sh
 video-edit-cli skills list                 # what ships in this build
@@ -30,7 +29,7 @@ video-edit-cli skills install              # copies into .claude/skills/
 video-edit-cli skills install --target <dir>
 ```
 
-They can also be managed with [agr](https://agr.run):
+You can also manage them with [agr](https://agr.run):
 
 ```sh
 agr add computerlovetech/video-edit-cli/video-edit-cli
@@ -41,12 +40,12 @@ agr add computerlovetech/video-edit-cli/video-edit-cli
 **video-edit-cli** is the core method skill. Its invariants apply to every task:
 
 - Source media is immutable; every derived file keeps its provenance sidecar.
-- Evidence before edits: never act on a range that hasn't been inspected via
-  metadata, transcript, frames, waveform, or preview.
+- Evidence before edits: inspect a range through metadata, a transcript,
+  frames, a waveform, or a preview before acting on it.
 - Validate before rendering; preview before mastering when edits are material.
 - Prefer the cheapest sufficient evidence.
 
-It walks the agent through the workflow described in
+It guides the agent through the workflow in
 [Workflows](workflows.md) — preflight, workspace, inspection, plan, render,
 cut review, and final validation — with branch references for audio
 restoration, packaged deliverables, multi-camera work, and vertical video.

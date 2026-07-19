@@ -9,11 +9,10 @@ description: >-
 # video-edit-cli
 
 Turn raw recordings into publish-ready videos with your AI agent. video-edit-cli
-gives your agent a headless editing workbench — inspect, transcribe, cut,
-master, and package video — plus a bundled [skill](skills.md) that teaches it
-how to edit well: edit a podcast into an episode, cut YouTube Shorts with
-burned-in subtitles, sync multi-camera shoots, restore audio. Open source,
-runs locally, no watermarks, no per-clip credits.
+lets your agent inspect, transcribe, cut, master, and package video. Its bundled
+[skill](skills.md) teaches the agent how to edit podcasts, make YouTube Shorts
+with burned-in subtitles, sync multi-camera shoots, and restore audio. It is
+open source, runs locally, and has no watermarks or per-clip credits.
 
 It works with any coding agent that supports skills: Claude Code, Codex, Pi,
 Cursor, Copilot, Amp, and others.
@@ -28,14 +27,13 @@ npx skills add computerlovetech/video-edit-cli --skill video-edit-cli
 ```
 
 Then ask your agent to edit a recording. The skill guides the agent through the
-whole workflow — including installing the `video-edit-cli` CLI itself
+workflow, including installing the `video-edit-cli` CLI
 (`uv tool install video-edit-cli`) if it isn't on `PATH`. Only `ffmpeg` and
 `ffprobe` must be installed separately.
 
 ## Where next
 
-- [Example prompts](examples.md) — prompts that work well; a growing
-  collection.
+- [Example prompts](examples.md) — prompts that work well.
 - [Concepts](concepts.md) — workspaces, provenance, result envelopes, edit
   plans, project profiles.
 - [Workflows](workflows.md) — recipes for a main edit, a vertical short, audio

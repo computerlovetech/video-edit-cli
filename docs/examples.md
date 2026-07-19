@@ -8,7 +8,7 @@ description: >-
 
 # Example prompts
 
-A growing collection of prompts that work well. Have a good one? Add it.
+These prompts work well. Have a good one? Add it.
 
 ## Make YouTube Shorts from a long video
 
@@ -50,5 +50,5 @@ A growing collection of prompts that work well. Have a good one? Add it.
 ## Inspect a folder of unknown media files
 
 > I found this folder of media files from an old shoot and have no idea what's
-> in them. Inspect everything in footage/2023-shoot/ and give me a summary of
-> each file: duration, streams, and what it appears to contain.
+> in them. Inspect everything in footage/2023-shoot/ and summarize each file:
+> duration, streams, and likely contents.
