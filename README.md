@@ -88,35 +88,6 @@ Silicon transcription, run `uv tool install 'video-edit-cli[mlx]'`. Use
 
 Runs on macOS and Linux. Windows is untested; use WSL.
 
-## How it compares
-
-|  | video-edit-cli | Opus Clip / Klap / Vizard | Descript | auto-editor |
-|---|---|---|---|---|
-| Price | Free, open source | $15–29/mo + per-clip credits | $16–24/mo | Free |
-| Watermarks | Never | On free tiers | On free tier | Never |
-| Runs locally / footage stays private | ✅ | ❌ uploaded to their cloud | ❌ | ✅ |
-| Explains every cut with a written reason | ✅ | ❌ hidden "virality score" | ❌ | ❌ |
-| Transcript-driven editing | ✅ | ✅ | ✅ | ❌ threshold only |
-| Shorts with reframing + burned-in captions | ✅ | ✅ | ✅ | ❌ |
-| Audio mastering, multicam sync, QC | ✅ | ❌ | Partial | ❌ |
-| Drives your existing AI coding agent | ✅ | ❌ | ❌ | ❌ |
-| Auditable & reproducible (provenance sidecars) | ✅ | ❌ | ❌ | ❌ |
-
-**vs. hosted clip apps (Opus Clip, Vizard, Klap, Descript)** — these apps
-charge subscriptions, use per-clip credits, and watermark their free tiers.
-video-edit-cli is free and runs locally. Your footage stays on your machine,
-and the agent explains every cut instead of giving a hidden score.
-
-**vs. auto-editor / jumpcutter** — these tools remove silence with a threshold.
-video-edit-cli also supports transcript-driven cuts, reframed and captioned
-shorts, audio mastering, multicam sync, subtitles, and final QC. Its skill
-teaches the agent when to use each command.
-
-**vs. FFmpeg wrappers and video MCP servers** — most give an agent raw
-commands. video-edit-cli also requires evidence before edits, validates plans,
-supports cut-by-cut review, records the source of every file, and returns
-stable JSON that agents can parse.
-
 ## Docs
 
 Full documentation: https://computerlovetech.github.io/video-edit-cli/

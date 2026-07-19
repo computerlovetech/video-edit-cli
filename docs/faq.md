@@ -20,8 +20,7 @@ render and review. You ask in plain language; the agent edits on your machine.
 video-edit-cli is open source and free, with no watermarks, per-clip credits,
 or clip expiry. Hosted clip apps charge $15–29 per month and set per-minute
 limits. An hour-long video can use much of a starter plan. Here, you pay only
-for your own compute. See the
-[comparison table](https://github.com/computerlovetech/video-edit-cli#how-it-compares).
+for your own compute.
 
 ## How do I make YouTube Shorts from a long video automatically?
 
